@@ -11,6 +11,7 @@
 #include "Severity.hpp"
 
 #include <atomic>
+#include <string_view>
 
 namespace jalog
 {
@@ -24,6 +25,8 @@ public:
     {
         return sev >= m_minSeverity.load(std::memory_order_relaxed);
     }
+
+    void addEntry(Severity sev, std::string_view text);
 
 private:
     // not Severity as values outside of the enum are valid
