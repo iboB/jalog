@@ -7,16 +7,18 @@
 //
 #pragma once
 
+#include <cstdint>
+
 namespace jalog
 {
 
-enum class severity
+enum class Severity : uint32_t
 {
-    debug,
-    info,
-    warning,
-    error,
-    fatal,
+    Debug,
+    Info,
+    Warning,
+    Error,
+    Fatal,
 };
 
 }
