@@ -9,6 +9,7 @@
 #include "API.h"
 
 #include "Severity.hpp"
+#include "ScopeDesc.hpp"
 
 #include <atomic>
 #include <string_view>
@@ -19,7 +20,9 @@ namespace jalog
 class JALOG_API Scope
 {
 public:
-    Scope();
+    Scope(std::string_view label, uintptr_t id = 0, intptr_t userData = -1);
+
+    const ScopeDesc& desc() const { return m_desc; }
 
     bool enabled(Severity sev)
     {
@@ -31,6 +34,8 @@ public:
 private:
     // not Severity as values outside of the enum are valid
     std::atomic_uint32_t m_minSeverity = 0;
+
+    ScopeDesc m_desc;
 };
 
 }

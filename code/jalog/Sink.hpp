@@ -15,7 +15,7 @@
 namespace jalog
 {
 
-struct ScopeDesc;
+class ScopeDesc;
 
 class JALOG_API Sink
 {

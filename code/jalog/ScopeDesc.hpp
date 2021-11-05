@@ -6,17 +6,27 @@
 // https://opensource.org/licenses/MIT
 //
 #pragma once
-#include "API.h"
+#include <itlib/static_vector.hpp>
 
 #include <cstdint>
+#include <string_view>
 
 namespace jalog
 {
 
-struct JALOG_API ScopeDesc
+class ScopeDesc
 {
-    std::string label;
-    intptr_t userData;
+public:
+    std::string_view label() const { return {labelBytes.data(), labelBytes.size()}; }
+    uintptr_t id() const { return m_id; }
+    intptr_t userData() const { return m_userData; }
+
+private:
+    friend class Scope;
+
+    itlib::static_vector<char, 16> m_labelBytes;
+    uintptr_t m_id; // unused by jalog. May be used by user-defined sinks
+    intptr_t m_userData; // unused by jalog. May be used by user-defined sinks
 };
 
 }
