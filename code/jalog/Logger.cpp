@@ -107,4 +107,23 @@ void Logger::unregisterScope(Scope& scope)
     *slot = nullptr;
 }
 
+LoggerSetupDSL::LoggerSetupDSL(Logger& l) : m_logger(l) {};
+
+LoggerSetupDSL::~LoggerSetupDSL()
+{
+    m_logger.initialize();
+}
+
+LoggerSetupDSL& LoggerSetupDSL::defaultLevel(Level lvl)
+{
+    m_logger.setDefaultLevel(lvl);
+    return *this;
+}
+
+LoggerSetupDSL& LoggerSetupDSL::addSink(SinkPtr sink)
+{
+    m_logger.addSink(std::move(sink));
+    return *this;
+}
+
 }

@@ -31,6 +31,8 @@ public:
     Logger(Logger&&) = delete;
     Logger& operator=(Logger&&) = delete;
 
+    LoggerSetupDSL setup() { return LoggerSetupDSL(*this); }
+
     // default level for newly created scopes
     // scopes set their own level afterwards
     void setDefaultLevel(Level lvl);

@@ -25,7 +25,7 @@ class JALOG_API Scope
 {
 public:
     // creates a default logger scope
-    Scope(std::string_view label, uintptr_t id = 0, intptr_t userData = -1);
+    explicit Scope(std::string_view label, uintptr_t id = 0, intptr_t userData = -1);
 
     // creates a scope for a given logger
     Scope(Logger& logger, std::string_view label, uintptr_t id = 0, intptr_t userData = -1);

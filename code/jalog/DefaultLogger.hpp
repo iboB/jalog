@@ -8,9 +8,8 @@
 #pragma once
 #include "API.h"
 
-class Logger;
-
 namespace jalog
 {
+class Logger;
 JALOG_API Logger& DefaultLogger();
 }

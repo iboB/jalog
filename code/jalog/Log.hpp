@@ -18,7 +18,7 @@
 #include "DefaultScope.hpp"
 #include "Writer.hpp"
 
-#define JALOG_SCOPE(scope, lvl, ...)
+#define JALOG_SCOPE(scope, lvl, ...) \
     if (scope.enabled(::jalog::Level::lvl)) \
         ::jalog::Writer(scope, ::jalog::Level::lvl), __VA_ARGS__
 

@@ -8,6 +8,7 @@
 #pragma once
 #include "API.h"
 
+#include "Level.hpp"
 #include "SinkPtr.hpp"
 
 namespace jalog
@@ -19,13 +20,15 @@ class Sink;
 class JALOG_API LoggerSetupDSL
 {
 public:
-    LoggerSetupDSL(Logger& l);
+    explicit LoggerSetupDSL(Logger& l);
     ~LoggerSetupDSL();
+
+    LoggerSetupDSL& defaultLevel(Level lvl);
 
     LoggerSetupDSL& addSink(SinkPtr sink);
 
     template <typename S>
-    LoggerSetupDSL& addSink() { addSink(std::make_shared<S>()); return *this; }
+    LoggerSetupDSL& addSink() { return addSink(std::make_shared<S>()); }
 
 private:
     Logger& m_logger;
