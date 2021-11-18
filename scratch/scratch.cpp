@@ -1,6 +1,9 @@
-#include <iostream>
+#include <jalog/DefaultLogger.hpp>
+#include <jalog/Logger.hpp>
+#include <jalog/Log.hpp>
 
-int main() {
-    std::cout.put(1);
+int main()
+{
+    jalog::DefaultLogger().setup();
     return 0;
 }
