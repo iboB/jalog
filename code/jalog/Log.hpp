@@ -14,7 +14,6 @@
 
 #if JALOG_ENABLED
 
-#include "Level.hpp"
 #include "DefaultScope.hpp"
 #include "Writer.hpp"
 
@@ -22,7 +21,7 @@
     if (scope.enabled(::jalog::Level::lvl)) \
         ::jalog::Writer(scope, ::jalog::Level::lvl), __VA_ARGS__
 
-#define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope)
+#define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
 
 #else
 
