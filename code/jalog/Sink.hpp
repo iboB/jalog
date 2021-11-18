@@ -8,12 +8,11 @@
 #pragma once
 #include "API.h"
 
-#include "Entry.hpp"
-
 namespace jalog
 {
 
 class ScopeDesc;
+struct Entry;
 
 class JALOG_API Sink
 {
