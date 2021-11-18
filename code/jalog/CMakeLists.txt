@@ -15,6 +15,9 @@ icm_add_lib(jalog JALOG
 
     Sink.hpp
     Sink.cpp
+
+    Printf.hpp
+    Printf.cpp
 )
 
 target_include_directories(jalog INTERFACE ..)
