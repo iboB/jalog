@@ -17,16 +17,16 @@
 namespace jalog
 {
 
-class Writer
+class Stream
 {
 public:
-    Writer(Scope& scope, Level lvl)
+    Stream(Scope& scope, Level lvl)
         : m_scope(scope)
         , m_level(lvl)
         , m_stream(&m_streambuf)
     {}
 
-    ~Writer()
+    ~Stream()
     {
         // length before zero-termination
         auto textLength = m_streambuf.poff();
@@ -37,7 +37,7 @@ public:
     }
 
     template <typename T>
-    Writer& operator,(const T& t)
+    Stream& operator,(const T& t)
     {
         m_stream << t;
         return *this;

@@ -16,6 +16,7 @@ icm_add_lib(jalog JALOG
     Sink.hpp
     Sink.cpp
 
+    Stream.hpp
     Printf.hpp
     Printf.cpp
 )

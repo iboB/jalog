@@ -15,11 +15,11 @@
 #if JALOG_ENABLED
 
 #include "DefaultScope.hpp"
-#include "Writer.hpp"
+#include "Stream.hpp"
 
 #define JALOG_SCOPE(scope, lvl, ...) \
     if (scope.enabled(::jalog::Level::lvl)) \
-        ::jalog::Writer(scope, ::jalog::Level::lvl), __VA_ARGS__
+        ::jalog::Stream(scope, ::jalog::Level::lvl), __VA_ARGS__
 
 #define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
 
