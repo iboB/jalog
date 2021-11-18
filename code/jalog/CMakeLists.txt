@@ -11,6 +11,9 @@ icm_add_lib(jalog JALOG
     Logger.hpp
     Logger.cpp
 
+    AsyncLogging.hpp
+    AsyncLogging.cpp
+
     Log.hpp
 
     Sink.hpp

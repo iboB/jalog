@@ -25,10 +25,10 @@ public:
 
     LoggerSetupDSL& defaultLevel(Level lvl);
 
-    LoggerSetupDSL& addSink(SinkPtr sink);
+    LoggerSetupDSL& add(SinkPtr sink);
 
     template <typename S>
-    LoggerSetupDSL& addSink() { return addSink(std::make_shared<S>()); }
+    LoggerSetupDSL& add() { return add(std::make_shared<S>()); }
 
 private:
     Logger& m_logger;

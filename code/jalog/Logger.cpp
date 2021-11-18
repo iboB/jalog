@@ -120,7 +120,7 @@ LoggerSetupDSL& LoggerSetupDSL::defaultLevel(Level lvl)
     return *this;
 }
 
-LoggerSetupDSL& LoggerSetupDSL::addSink(SinkPtr sink)
+LoggerSetupDSL& LoggerSetupDSL::add(SinkPtr sink)
 {
     m_logger.addSink(std::move(sink));
     return *this;

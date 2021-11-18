@@ -9,7 +9,7 @@
 int main()
 {
     jalog::DefaultLogger().setup()
-        .addSink<jalog::sinklib::ColorSink>();
+        .add<jalog::sinklib::ColorSink>();
 
     jalog::Scope Algos("Algorithms");
 
