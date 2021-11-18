@@ -17,12 +17,12 @@ inline constexpr std::string_view Level_toString(Level l)
 {
     switch (l)
     {
-    case Level::Debug: return "debug";
-    case Level::Info: return "Info";
-    case Level::Warning: return "Warn";
-    case Level::Error: return "ERROR";
-    case Level::Critical: return "!CRIT!";
-    default: return "?";
+    case Level::Debug:   return "debug";
+    case Level::Info:    return "Info ";
+    case Level::Warning: return "Warn ";
+    case Level::Error:   return "ERROR";
+    case Level::Critical:return "CRIT!";
+    default: return "  ?  ";
     }
 }
 

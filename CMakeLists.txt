@@ -20,6 +20,7 @@ include(icm_add_lib)
 #######################################
 # options
 option(JALOG_STATIC "jalog: build as static lib" OFF)
+option(JALOG_BUILD_SINKLIB "jalog: build extension sinklib" ON)
 option(JALOG_BUILD_TESTS "jalog: build tests" ${ICM_DEV_MODE})
 option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 
@@ -32,6 +33,10 @@ CPMAddPackage(gh:iboB/itlib@1.4.5)
 # subdirs
 
 add_subdirectory(code/jalog)
+
+if(JALOG_BUILD_SINKLIB)
+    add_subdirectory(ext/jalog/sinklib)
+endif()
 
 if(ICM_DEV_MODE)
     add_subdirectory(scratch)

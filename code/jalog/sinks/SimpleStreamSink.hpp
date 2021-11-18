@@ -32,17 +32,14 @@ public:
             return m_err;
         }();
 
-        using namespace std::chrono;
-
         // time
         {
+            using namespace std::chrono;
             itlib::time_t tt(system_clock::to_time_t(entry.timestamp));
             auto tm = tt.localtime();
-            out << std::put_time(&tm, "%y%m%d %X");
-        }
+            out << std::put_time(&tm, "%m/%d %X");
 
-        // milliseconds
-        {
+            // milliseconds
             auto ms = duration_cast<milliseconds>(entry.timestamp.time_since_epoch()).count() % 1000;
             out << "." << ms;
         }
@@ -50,7 +47,8 @@ public:
         // scope
         {
             auto lbl = entry.scope.label();
-            if (!lbl.empty()) {
+            if (!lbl.empty())
+            {
                 out << " [" << lbl << "]";
             }
         }
