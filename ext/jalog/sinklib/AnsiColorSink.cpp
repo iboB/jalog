@@ -52,6 +52,7 @@ void AnsiColorSink::record(const Entry& entry)
             "\033[31m[ERROR]\033[m",
             "\033[01;31m[CRIT!]\033[m",
         };
+        static_assert(std::size(lstr) == static_cast<uint32_t>(Level::Off));
         const char* str = (entry.level < Level::Off) ? lstr[static_cast<uint32_t>(entry.level)] : "[  ?  ]";
         fprintf(out, str);
     }

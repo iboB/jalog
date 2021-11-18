@@ -2,14 +2,14 @@
 #include <jalog/Logger.hpp>
 #include <jalog/Log.hpp>
 
-#include <jalog/sinklib/AnsiColorSink.hpp>
+#include <jalog/sinklib/ColorSink.hpp>
 
 #include <jalog/Printf.hpp>
 
 int main()
 {
     jalog::DefaultLogger().setup()
-        .addSink<jalog::sinklib::AnsiColorSink>();
+        .addSink<jalog::sinklib::ColorSink>();
 
     jalog::Scope Algos("Algorithms");
 
