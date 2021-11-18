@@ -6,21 +6,11 @@
 // https://opensource.org/licenses/MIT
 //
 #pragma once
-#include "API.h"
 
-#include "Entry.hpp"
+#include <memory>
 
 namespace jalog
 {
-
-class ScopeDesc;
-
-class JALOG_API Sink
-{
-public:
-    virtual ~Sink();
-
-    virtual void record(const Entry& entry) = 0;
-};
-
+class Sink;
+using SinkPtr = std::shared_ptr<Sink>;
 }

@@ -8,19 +8,9 @@
 #pragma once
 #include "API.h"
 
-#include "Entry.hpp"
+#include "Scope.hpp"
 
 namespace jalog
 {
-
-class ScopeDesc;
-
-class JALOG_API Sink
-{
-public:
-    virtual ~Sink();
-
-    virtual void record(const Entry& entry) = 0;
-};
-
+extern JALOG_API Scope Default_Scope;
 }

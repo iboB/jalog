@@ -5,8 +5,21 @@
 // See accompanying file LICENSE.txt or copy at
 // https://opensource.org/licenses/MIT
 //
-#include "jalog.hpp"
+#pragma once
 
-int tpl_add(int a, int b) {
-    return a + b;
+#include <cstdint>
+
+namespace jalog
+{
+
+enum class Level : uint32_t
+{
+    Debug,
+    Info,
+    Warning,
+    Error,
+    Critical,
+    Off
+};
+
 }

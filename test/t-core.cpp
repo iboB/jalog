@@ -6,10 +6,9 @@
 // https://opensource.org/licenses/MIT
 //
 #include <doctest/doctest.h>
-#include <jalog/jalog.hpp>
 
 TEST_SUITE_BEGIN("jalog");
 
 TEST_CASE("test") {
-    CHECK(8 == tpl_add(3, 5));
+    CHECK(true);
 }

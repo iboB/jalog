@@ -6,8 +6,6 @@
 // https://opensource.org/licenses/MIT
 //
 #pragma once
-#include "Severity.hpp"
-
 #if !defined(JALOG_ENABLED)
 #   define JALOG_ENABLED 1
 #endif
@@ -16,14 +14,19 @@
 
 #if JALOG_ENABLED
 
-#define JALOG(sev, scope, ...) \
-    do { \
-        if (scope.enabled(::jalog::Severity::sev)) \
-            logger(scope, ::jalog::Severity::sev), __VA_ARGS__ \
-    } while(false)
+#include "Level.hpp"
+#include "DefaultScope.hpp"
+#include "Writer.hpp"
+
+#define JALOG_SCOPE(scope, lvl, ...)
+    if (scope.enabled(::jalog::Level::lvl)) \
+        ::jalog::Writer(scope, ::jalog::Level::lvl), __VA_ARGS__
+
+#define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope)
 
 #else
 
+#define JALOG_SCOPE I_JALOG_NOOP
 #define JALOG I_JALOG_NOOP
 
 #endif

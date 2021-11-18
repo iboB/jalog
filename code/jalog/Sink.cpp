@@ -5,13 +5,9 @@
 // See accompanying file LICENSE.txt or copy at
 // https://opensource.org/licenses/MIT
 //
-#pragma once
-#include "API.h"
+#include "Sink.hpp"
 
 namespace jalog
 {
-
-
+Sink::~Sink() = default; // export the vtable from here
 }
-
-JALOG_API int tpl_add(int a, int b);

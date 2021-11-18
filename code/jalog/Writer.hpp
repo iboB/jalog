@@ -6,19 +6,22 @@
 // https://opensource.org/licenses/MIT
 //
 #pragma once
+#include "API.h"
 
-#include <cstdint>
+#include <itlib/small_vector.hpp>
+#include <itlib/mem_streambuf.hpp>
+#include <ostream>
 
 namespace jalog
 {
 
-enum class Severity : uint32_t
+class Writer
 {
-    Debug,
-    Info,
-    Warning,
-    Error,
-    Fatal,
+public:
+    Writer& operator,(int n)
+    {
+
+    }
 };
 
 }
