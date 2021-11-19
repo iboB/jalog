@@ -30,8 +30,11 @@ public:
     void update();
 
     // safe on any thread
-    void addSink(SinkPtr sink);
-    void removeSink(SinkPtr sink);
+    void add(SinkPtr sink);
+    template <typename S>
+    void add() { return add(std::make_shared<S>()); }
+    void remove(const Sink* sink);
+    void remove(const SinkPtr& sink) { remove(sink.get()); }
 
     virtual void record(const Entry& entry) override;
 

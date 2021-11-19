@@ -3,15 +3,18 @@
 #include <jalog/Log.hpp>
 
 #include <jalog/sinklib/ColorSink.hpp>
-#include <jalog/sinklib/AnsiColorSink.hpp>
+#include <jalog/AsyncLogging.hpp>
 
 #include <jalog/Printf.hpp>
 
 int main()
 {
+    auto async = std::make_shared<jalog::AsyncLogging>();
+
+    async->add<jalog::sinklib::ColorSink>();
+
     jalog::DefaultLogger().setup()
-        .add<jalog::sinklib::ColorSink>()
-        .add<jalog::sinklib::AnsiColorSink>();
+        .add(async);
 
     jalog::Scope Algos("Algorithms");
 
@@ -26,6 +29,8 @@ int main()
     JALOG(Info, "Going further");
     JALOG(Error, "Something bad happened");
     JALOG(Critical, "Something REALLY bad happened");
+
+    async->update();
 
     return 0;
 }
