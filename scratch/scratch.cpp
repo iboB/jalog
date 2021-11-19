@@ -3,13 +3,15 @@
 #include <jalog/Log.hpp>
 
 #include <jalog/sinklib/ColorSink.hpp>
+#include <jalog/sinklib/AnsiColorSink.hpp>
 
 #include <jalog/Printf.hpp>
 
 int main()
 {
     jalog::DefaultLogger().setup()
-        .add<jalog::sinklib::ColorSink>();
+        .add<jalog::sinklib::ColorSink>()
+        .add<jalog::sinklib::AnsiColorSink>();
 
     jalog::Scope Algos("Algorithms");
 

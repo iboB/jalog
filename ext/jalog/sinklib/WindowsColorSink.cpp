@@ -84,7 +84,7 @@ void WindowsColorSink::record(const Entry& entry)
 
         int ms = int(duration_cast<milliseconds>(entry.timestamp.time_since_epoch()).count() % 1000);
         char buf2[32];
-        int len = snprintf(buf2, sizeof(buf2), "[%s.%03d] ", buf, ms);
+        int len = snprintf(buf2, sizeof(buf2), "%s.%03d ", buf, ms);
 
         printWithColor(out, FOREGROUND_BLUE, std::string_view(buf2, size_t(len)));
     }
@@ -103,7 +103,7 @@ void WindowsColorSink::record(const Entry& entry)
     {
         static const uint16_t colors[] = {
             FOREGROUND_RED | FOREGROUND_BLUE,
-            FOREGROUND_RED | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
+            FOREGROUND_GREEN | FOREGROUND_BLUE | FOREGROUND_INTENSITY,
             FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_INTENSITY,
             FOREGROUND_RED,
             FOREGROUND_RED | FOREGROUND_INTENSITY
