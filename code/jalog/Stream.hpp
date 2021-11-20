@@ -8,10 +8,10 @@
 #pragma once
 #include "API.h"
 
+#include "_qwrite.hpp"
+
 #include "Scope.hpp"
 
-#include <itlib/small_vector.hpp>
-#include <itlib/mem_streambuf.hpp>
 #include <ostream>
 
 namespace jalog
@@ -47,7 +47,7 @@ private:
     Scope& m_scope;
     Level m_level;
 
-    itlib::mem_ostreambuf<itlib::small_vector<char, 1024>> m_streambuf;
+    qwrite::streambuf m_streambuf;
     std::ostream m_stream;
 };
 
