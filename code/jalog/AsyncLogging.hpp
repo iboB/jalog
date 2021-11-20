@@ -14,10 +14,8 @@
 namespace jalog
 {
 
-namespace impl
-{
-class AsyncLoggingImpl;
-}
+namespace impl { class AsyncLoggingImpl; }
+class AsyncLoggingThread;
 
 class JALOG_API AsyncLogging final : public Sink
 {
@@ -39,6 +37,7 @@ public:
     virtual void record(const Entry& entry) override;
 
 private:
+    friend class AsyncLoggingThread;
     std::unique_ptr<impl::AsyncLoggingImpl> m_impl;
 };
 

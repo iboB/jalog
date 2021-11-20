@@ -4,6 +4,7 @@
 
 #include <jalog/sinklib/ColorSink.hpp>
 #include <jalog/AsyncLogging.hpp>
+#include <jalog/AsyncLoggingThread.hpp>
 
 #include <jalog/Printf.hpp>
 
@@ -15,6 +16,8 @@ int main()
 
     jalog::DefaultLogger().setup()
         .add(async);
+
+    jalog::AsyncLoggingThread lt(*async);
 
     jalog::Scope Algos("Algorithms");
 
@@ -29,8 +32,6 @@ int main()
     JALOG(Info, "Going further");
     JALOG(Error, "Something bad happened");
     JALOG(Critical, "Something REALLY bad happened");
-
-    async->update();
 
     return 0;
 }

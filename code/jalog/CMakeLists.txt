@@ -13,6 +13,7 @@ icm_add_lib(jalog JALOG
 
     AsyncLogging.hpp
     AsyncLogging.cpp
+    AsyncLoggingThread.hpp
 
     Log.hpp
 
@@ -29,4 +30,5 @@ target_link_libraries(jalog
     PUBLIC
         splat
         itlib
+        xec
 )

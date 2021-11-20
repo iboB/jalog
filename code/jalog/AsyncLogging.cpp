@@ -6,8 +6,12 @@
 // https://opensource.org/licenses/MIT
 //
 #include "AsyncLogging.hpp"
+#include "AsyncLoggingThread.hpp"
 
 #include "Entry.hpp"
+
+#include <xec/ExecutorBase.hpp>
+#include <xec/ThreadExecution.hpp>
 
 #include <itlib/qalgorithm.hpp>
 #include <vector>
@@ -20,7 +24,7 @@ namespace jalog
 
 namespace impl
 {
-class AsyncLoggingImpl
+class AsyncLoggingImpl final : public xec::ExecutorBase
 {
 public:
     // pack raw pointers along with the sinks to skip
@@ -88,13 +92,19 @@ public:
         m_executingTasks.clear();
     }
 
-    void update()
+    virtual void update() override
     {
         m_tasksMutex.lock();
         swapBuffers();
         m_tasksMutex.unlock();
         executeTasks();
     }
+
+    virtual void finalize() override
+    {
+        update();
+    }
+
 
     template <typename T>
     void pushTask(T&& t)
@@ -104,10 +114,10 @@ public:
 };
 }
 
-using Impl = impl::AsyncLoggingImpl;
+using AL = impl::AsyncLoggingImpl;
 
 AsyncLogging::AsyncLogging()
-    : m_impl(new Impl)
+    : m_impl(new AL)
 {}
 
 AsyncLogging::~AsyncLogging() = default;
@@ -119,17 +129,40 @@ void AsyncLogging::update()
 
 void AsyncLogging::add(SinkPtr sink)
 {
-    m_impl->pushTask(Impl::AddSink{std::move(sink)});
+    m_impl->pushTask(AL::AddSink{std::move(sink)});
 }
 
 void AsyncLogging::remove(const Sink* sink)
 {
-    m_impl->pushTask(Impl::RemoveSink{sink});
+    m_impl->pushTask(AL::RemoveSink{sink});
 }
 
 void AsyncLogging::record(const Entry& entry)
 {
-    m_impl->pushTask(Impl::LogEntry{entry});
+    m_impl->pushTask(AL::LogEntry{entry});
 }
+
+// thread
+
+class AsyncLoggingThread::Impl
+{
+public:
+    Impl(AL& al, std::string_view threadName)
+        : m_execution(al)
+    {
+        std::optional<std::string_view> name;
+        if (!threadName.empty()) name = threadName;
+        m_execution.launchThread(name);
+    }
+
+    xec::ThreadExecution m_execution;
+};
+
+AsyncLoggingThread::AsyncLoggingThread(AsyncLogging& source, std::string_view threadName)
+    : m_impl(new Impl(*source.m_impl, threadName))
+{}
+
+AsyncLoggingThread::~AsyncLoggingThread() = default;
+
 
 }
