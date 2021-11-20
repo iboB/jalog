@@ -20,7 +20,7 @@ class AsyncLoggingThread;
 class JALOG_API AsyncLogging final : public Sink
 {
 public:
-    AsyncLogging();
+    AsyncLogging(size_t initialTextBufferSize = 4096);
     ~AsyncLogging();
 
     // if you don't launch the associated thread
