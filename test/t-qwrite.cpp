@@ -84,3 +84,37 @@ TEST_CASE("wrapped padding")
     CHECK(wi2s(-87, {7, pad::right, 'z'}) == "-87zzzz");
     CHECK(wi2s(-87, {5, pad::inner, 'l'}) == "-ll87");
 }
+
+template <typename F>
+std::string ccf2s(F f)
+{
+    char buf[128];
+    auto res = msstl::to_chars(buf, buf+sizeof(buf), f);
+    return {buf, res.ptr};
+}
+
+template <typename F>
+std::string wf2s(F f)
+{
+    std::stringstream sout;
+    jalog::qwrite::write_float(*sout.rdbuf(), f);
+    return sout.str();
+}
+
+template <typename F>
+void ftest(F f)
+{
+    CHECK(ccf2s(f) == wf2s(f));
+}
+
+TEST_CASE("float")
+{
+    // sanity
+    CHECK(ccf2s(3.14) == "3.14");
+    CHECK(wf2s(-8.2f) == "-8.2");
+
+    ftest(-4.1235);
+    ftest(1e-11);
+    ftest(4.f);
+    ftest(-4.22f);
+}

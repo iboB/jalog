@@ -6,12 +6,12 @@
 // https://opensource.org/licenses/MIT
 //
 #pragma once
+#include "API.h"
 
 #include <itlib/small_vector.hpp>
 #include <itlib/mem_streambuf.hpp>
 
-namespace jalog::qwrite
-{
+namespace jalog::qwrite {
 #if defined(I_JALOG_TESTING_QWRITE)
 // for the qwrite tests use std::streambuf as it makes test code simpler
 using streambuf = std::streambuf;
@@ -102,5 +102,16 @@ void write_integer(streambuf& out, const wrapped_integer<Integer, Base> value, p
 
     write_padded(out, p, len, padding);
 }
+
+enum class float_format {
+    general,
+    fixed,
+    scientific,
+    hex,
+};
+
+JALOG_API void write_float(streambuf& out, float f, float_format fmt = float_format::general, pad padding = {});
+JALOG_API void write_float(streambuf& out, double f, float_format fmt = float_format::general, pad padding = {});
+JALOG_API void write_float(streambuf& out, long double f, float_format fmt = float_format::general, pad padding = {});
 
 }
