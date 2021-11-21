@@ -20,12 +20,45 @@ using streambuf = std::streambuf;
 using streambuf = itlib::mem_ostreambuf<itlib::small_vector<char, 1024>>;
 #endif
 
+struct pad {
+    int16_t size = 0;
+    enum pad_type : int8_t {
+        left,
+        right,
+        inner
+    } type = left;
+    char character = ' ';
+};
+
+inline void write_padded(streambuf& out, const char* numstr, int length, pad padding) {
+    padding.size -= int16_t(length);
+    if (padding.size <= 0) {
+        out.sputn(numstr, length);
+    }
+    else if (padding.type == pad::right) {
+        out.sputn(numstr, length);
+        while (padding.size --> 0) {
+            out.sputc(padding.character);
+        }
+    }
+    else {
+        if (padding.type == pad::inner && *numstr == '-') {
+            out.sputc('-');
+            ++numstr;
+            --length;
+        }
+        while (padding.size --> 0) {
+            out.sputc(padding.character);
+        }
+        out.sputn(numstr, length);
+    }
+}
+
 template <typename Integer, unsigned Base = 10>
 struct wrapped_integer { Integer i; };
 
 template <typename Integer, unsigned Base>
-void write_integer(streambuf& out, const wrapped_integer<Integer, Base> value, int padding = 0, char pad = ' ')
-{
+void write_integer(streambuf& out, const wrapped_integer<Integer, Base> value, pad padding = {}) {
     static_assert(Base >= 2 && Base <= 36, "Invalid base");
 
     char buf[sizeof(Integer) * 8]; // enough for integers in base 2 or greater
@@ -56,21 +89,18 @@ void write_integer(streambuf& out, const wrapped_integer<Integer, Base> value, i
             *--p = char_from_digit[uvalue % ubase];
         }
         uvalue /= ubase;
-    } while (uvalue != 0);;
+    } while (uvalue != 0);
+
+    auto len = end - p;
 
     if constexpr (std::is_signed_v<Integer>) {
         if (value.i < 0) {
             *--p = '-';
+            ++len;
         }
     }
 
-    auto len = end - p;
-    padding -= len;
-    while (padding --> 0) {
-        out.sputc(pad);
-    }
-
-    out.sputn(p, len);
+    write_padded(out, p, len, padding);
 }
 
 }
