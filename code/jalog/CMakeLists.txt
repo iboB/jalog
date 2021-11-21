@@ -33,5 +33,7 @@ target_link_libraries(jalog
     PUBLIC
         splat
         itlib
+    PRIVATE
         xec
+        mscharconv
 )

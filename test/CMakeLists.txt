@@ -1,6 +1,6 @@
 include(icm_testing)
 
-CPMAddPackage("gh:iboB/doctest-lib@2.4.6")
+CPMAddPackage(gh:iboB/doctest-lib@2.4.6)
 
 icm_add_test(
     NAME qwrite
@@ -9,6 +9,7 @@ icm_add_test(
         doctest-main
         itlib
         splat
+        mscharconv
     SOURCES t-qwrite.cpp
 )
 

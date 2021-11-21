@@ -20,7 +20,7 @@ using streambuf = std::streambuf;
 using streambuf = itlib::mem_ostreambuf<itlib::small_vector<char, 1024>>;
 #endif
 
-template <typename Integer, unsigned Base = 64>
+template <typename Integer, unsigned Base = 10>
 struct wrapped_integer { Integer i; };
 
 template <typename Integer, unsigned Base>
@@ -70,7 +70,7 @@ void write_integer(streambuf& out, const wrapped_integer<Integer, Base> value, i
         out.sputc(pad);
     }
 
-    out.xsputn(p, len);
+    out.sputn(p, len);
 }
 
 }

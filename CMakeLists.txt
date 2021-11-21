@@ -29,6 +29,7 @@ option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 CPMAddPackage(gh:iboB/splat@1.1.0)
 CPMAddPackage(gh:iboB/itlib@1.4.5)
 CPMAddPackage(gh:iboB/xec@1.3.1)
+CPMAddPackage(gh:iboB/mscharconv@1.1.1)
 
 #######################################
 # subdirs
