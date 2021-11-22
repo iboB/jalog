@@ -13,6 +13,7 @@
 #include "Scope.hpp"
 
 #include <ostream>
+#include <type_traits>
 
 namespace jalog
 {
@@ -34,6 +35,28 @@ public:
         m_streambuf.sputc(0);
 
         m_scope.addEntryUnchecked(m_level, std::string_view(m_streambuf.peek_container().data(), textLength));
+    }
+
+    #define I_SU_O_INTEGER(t) \
+    StreamUnchecked& operator,(t i) { \
+        qwrite::write_integer(m_streambuf, qwrite::wrapped_integer<t, 10>{i}); \
+        return *this; }
+    I_SU_O_INTEGER(signed char)
+    I_SU_O_INTEGER(unsigned char)
+    I_SU_O_INTEGER(signed short)
+    I_SU_O_INTEGER(unsigned short)
+    I_SU_O_INTEGER(signed int)
+    I_SU_O_INTEGER(unsigned int)
+    I_SU_O_INTEGER(signed long)
+    I_SU_O_INTEGER(unsigned long)
+    I_SU_O_INTEGER(signed long long)
+    I_SU_O_INTEGER(unsigned long long)
+    #undef I_SU_O_INTEGER
+
+    StreamUnchecked& operator,(char c)
+    {
+        m_streambuf.sputc(c);
+        return *this;
     }
 
     template <typename T>
