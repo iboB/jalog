@@ -48,15 +48,16 @@ public:
     // tasks
     struct LogEntry
     {
+        LogEntry(const Entry& e) : entry(e) {}
         Entry entry;
+        int ibegin = 0; // index within loggingBuffer with which to rebuild entry.text
         void operator()(AsyncLoggingImpl& l)
         {
             // "hacky" step 2
-            // our entry's now has indices instead of pointers
-            // reinstate them as pointers within loggingBuffer
-            const auto indexBegin = reinterpret_cast<uintptr_t>(entry.text.data());
+            // our entry is currently invalid, though the size is correct
+            // rebuild it via the ibegin index (and its valid size) from pointers within loggingBuffer
 
-            entry.text = std::string_view(l.m_loggingTextBuffer.data() + indexBegin, entry.text.size());
+            entry.text = std::string_view(l.m_loggingTextBuffer.data() + ibegin, entry.text.size());
 
             for (auto& sd : l.m_sinks)
             {
@@ -133,24 +134,16 @@ public:
     {
         auto& addedText = le.entry.text;
 
-        const auto addedTextStart = m_textBuffer.size();
-        const auto addedTextSize = addedText.length();
+        // set the start index of the entry
+        // this is our "hacky" step 1
+        // note that we can't just set entry text to point inside the buffer here because it grows
+        // when it grows it can get reallocated and our pointers will become invalid
+        // that's why we keep the starting index and will rebuild the text in step 2
+        le.ibegin = int(m_textBuffer.size());
 
-        // for entries we must also copy the text into our text buffer
+        // copy the text into our text buffer
         m_textBuffer.insert(m_textBuffer.end(), addedText.begin(), addedText.end());
         m_textBuffer.push_back(0); // also zero-terminate string to be nice
-
-        // now we do "hacky" step 1
-        // we set the entry's text to point to zero-offset pointers
-        // next, when we log the actual entry, we will update them again to point in the buffer
-        // in "hacky" step 2
-        // note that we can't just set them to point inside the buffer here because it grows
-        // when it grows it can get reallocated and our pointers will become invalid
-        // that's why instead of adding several helper types, we just use the internal
-        // string_view pointer as indices
-        char* indexBegin = nullptr;
-        indexBegin += addedTextStart;
-        addedText = std::string_view(indexBegin, addedTextSize);
 
         // now add the modified task
         m_taskQueue.emplace_back(le);
@@ -191,7 +184,7 @@ void AsyncLogging::remove(const Sink* sink)
 
 void AsyncLogging::record(const Entry& entry)
 {
-    m_impl->pushTask(AL::LogEntry{entry});
+    m_impl->pushTask(AL::LogEntry(entry));
 }
 
 // thread
