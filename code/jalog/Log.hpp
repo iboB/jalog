@@ -15,11 +15,11 @@
 #if JALOG_ENABLED
 
 #include "DefaultScope.hpp"
-#include "Stream.hpp"
+#include "StreamUnchecked.hpp"
 
 #define JALOG_SCOPE(scope, lvl, ...) \
     if (scope.enabled(::jalog::Level::lvl)) \
-        ::jalog::Stream(scope, ::jalog::Level::lvl), __VA_ARGS__
+        ::jalog::StreamUnchecked(scope, ::jalog::Level::lvl), __VA_ARGS__
 
 #define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
 

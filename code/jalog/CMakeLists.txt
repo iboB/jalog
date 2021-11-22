@@ -23,7 +23,7 @@ icm_add_lib(jalog JALOG
     _qwrite.hpp
     _qwrite.cpp
 
-    Stream.hpp
+    StreamUnchecked.hpp
     Printf.hpp
     Printf.cpp
 )

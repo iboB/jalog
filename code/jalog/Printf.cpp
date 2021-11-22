@@ -15,6 +15,8 @@ namespace jalog
 
 void Printf(Scope& scope, Level lvl, const char* format, ...)
 {
+    if (!scope.enabled(lvl)) return;
+
     va_list args;
 
     // optimistically try to fit in a small buffer
@@ -28,7 +30,7 @@ void Printf(Scope& scope, Level lvl, const char* format, ...)
         if (size <= sizeof(buf))
         {
             // success
-            scope.addEntry(lvl, std::string_view(buf, size));
+            scope.addEntryUnchecked(lvl, std::string_view(buf, size));
             return;
         }
     }
@@ -38,7 +40,7 @@ void Printf(Scope& scope, Level lvl, const char* format, ...)
     size = size_t(vsnprintf(dbuf.data(), dbuf.size(), format, args));
     va_end(args);
 
-    scope.addEntry(lvl, std::string_view(dbuf.data(), size));
+    scope.addEntryUnchecked(lvl, std::string_view(dbuf.data(), size));
 }
 
 }

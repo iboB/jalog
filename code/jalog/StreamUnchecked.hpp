@@ -17,27 +17,27 @@
 namespace jalog
 {
 
-class Stream
+class StreamUnchecked
 {
 public:
-    Stream(Scope& scope, Level lvl)
+    StreamUnchecked(Scope& scope, Level lvl)
         : m_scope(scope)
         , m_level(lvl)
         , m_stream(&m_streambuf)
     {}
 
-    ~Stream()
+    ~StreamUnchecked()
     {
         // length before zero-termination
         auto textLength = m_streambuf.poff();
         // we don't *have* to zero-terminate the string, but let's be friendly to the outside world
         m_streambuf.sputc(0);
 
-        m_scope.addEntry(m_level, std::string_view(m_streambuf.peek_container().data(), textLength));
+        m_scope.addEntryUnchecked(m_level, std::string_view(m_streambuf.peek_container().data(), textLength));
     }
 
     template <typename T>
-    Stream& operator,(const T& t)
+    StreamUnchecked& operator,(const T& t)
     {
         m_stream << t;
         return *this;
