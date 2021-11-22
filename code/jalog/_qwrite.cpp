@@ -35,7 +35,7 @@ void write_fp(streambuf& out, FP f, float_format fmt, pad padding) {
         res.ptr = buf + snprintf(buf, sizeof(buf), "%f", double(f));
     }
 
-    write_padded(out, buf, res.ptr - buf, padding);
+    write_padded(out, buf, int(res.ptr - buf), padding);
 }
 }
 

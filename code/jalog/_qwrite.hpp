@@ -91,7 +91,7 @@ void write_integer(streambuf& out, const wrapped_integer<Integer, Base> value, p
         uvalue /= ubase;
     } while (uvalue != 0);
 
-    auto len = end - p;
+    int len = int(end - p);
 
     if constexpr (std::is_signed_v<Integer>) {
         if (value.i < 0) {
