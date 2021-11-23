@@ -41,7 +41,11 @@ public:
 
             // milliseconds
             auto ms = duration_cast<milliseconds>(entry.timestamp.time_since_epoch()).count() % 1000;
-            out << "." << ms;
+            const char* padding;
+            if (ms < 10) padding = "00";
+            else if (ms < 100) padding = "0";
+            else padding = "";
+            out << "." << padding << ms;
         }
 
         // scope
