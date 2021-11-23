@@ -21,8 +21,11 @@ int main()
 
     jalog::Scope Algos("Algorithms");
 
+    int* p = new int[12];
+
     JALOG(Info, "Hello ", 3, " times");
     JALOG(Info, "Something or other");
+    JALOG(Info, "P is ", p);
     JALOG_SCOPE(Algos, Info, "Initializing algos");
     JALOG(Debug, "iteration ", 0);
     JALOG(Debug, "iteration ", 53);

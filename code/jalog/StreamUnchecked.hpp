@@ -37,32 +37,30 @@ public:
         m_scope.addEntryUnchecked(m_level, std::string_view(m_streambuf.peek_container().data(), textLength));
     }
 
-    #define I_SU_O_INTEGER(t) \
-    StreamUnchecked& operator,(t i) { \
-        qwrite::write_integer(m_streambuf, qwrite::wrapped_integer<t, 10>{i}); \
-        return *this; }
-    I_SU_O_INTEGER(signed char)
-    I_SU_O_INTEGER(unsigned char)
-    I_SU_O_INTEGER(signed short)
-    I_SU_O_INTEGER(unsigned short)
-    I_SU_O_INTEGER(signed int)
-    I_SU_O_INTEGER(unsigned int)
-    I_SU_O_INTEGER(signed long)
-    I_SU_O_INTEGER(unsigned long)
-    I_SU_O_INTEGER(signed long long)
-    I_SU_O_INTEGER(unsigned long long)
-    #undef I_SU_O_INTEGER
+    using Self = StreamUnchecked;
 
-    StreamUnchecked& operator,(char c)
+    Self& operator,(char c) { m_streambuf.sputc(c); return *this; }
+    Self& operator,(std::string_view s) { m_streambuf.sputn(s.data(), s.size()); return *this; }
+    Self& operator,(const char* s) { operator,(std::string_view(s)); return *this; }
+    Self& operator,(const std::string& s) { operator,(std::string_view(s)); return *this; }
+
+    template <typename T>
+    Self& operator,(T* p)
     {
-        m_streambuf.sputc(c);
+        qwrite::write_integer(m_streambuf,
+            qwrite::wrapped_integer<uintptr_t, 16>{reinterpret_cast<uintptr_t>(p)});
         return *this;
     }
 
     template <typename T>
-    StreamUnchecked& operator,(const T& t)
+    Self& operator,(const T& t)
     {
-        m_stream << t;
+        if constexpr (std::is_integral_v<T>)
+            qwrite::write_integer(m_streambuf, qwrite::wrapped_integer<T, 10>{t});
+        else if constexpr (std::is_floating_point_v<T>)
+            qwrite::write_float(m_streambuf, t);
+        else
+            m_stream << t;
         return *this;
     }
 
