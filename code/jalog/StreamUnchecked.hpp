@@ -18,6 +18,9 @@
 namespace jalog
 {
 
+template <unsigned Base, typename I>
+auto base(I i) -> qwrite::wrapped_integer<I, Base> { return {i}; }
+
 class StreamUnchecked
 {
 public:
@@ -49,6 +52,13 @@ public:
     {
         qwrite::write_integer(m_streambuf,
             qwrite::wrapped_integer<uintptr_t, 16>{reinterpret_cast<uintptr_t>(p)});
+        return *this;
+    }
+
+    // baseful and padded integers
+    template <typename I, unsigned Base>
+    Self& operator,(qwrite::wrapped_integer<I, Base> wi) {
+        qwrite::write_integer(m_streambuf, wi);
         return *this;
     }
 
