@@ -62,7 +62,7 @@ private:
     bool m_initialized = false;
 
     // scope registry
-    Level m_defaultLevel;
+    Level m_defaultLevel = Level::Debug;
     friend class Scope;
     void registerScope(Scope& scope);
     void unregisterScope(Scope& scope);
