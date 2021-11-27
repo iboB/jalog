@@ -13,18 +13,18 @@
 #if JALOG_ENABLED
 
 #include "DefaultScope.hpp"
-#include "BasicStream.hpp"
+#include "Printf.hpp"
 
-#define JALOG_SCOPE(scope, lvl, ...) \
+#define JALOG_PRINTF_SCOPE(scope, lvl, fmt, ...) \
     if (scope.enabled(::jalog::Level::lvl)) \
-        ::jalog::BasicStream(scope, ::jalog::Level::lvl), __VA_ARGS__, ::jalog::endl
+        ::jalog::PrintfUnchecked(scope, ::jalog::Level::lvl, fmt, __VA_ARGS__)
 
-#define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
+#define JALOG_PRINTF(lvl, ...) JALOG_PRINTF_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
 
 #else
 
-#define JALOG_SCOPE(...)
-#define JALOG(...)
+#define JALOG_PRINTF_SCOPE(...)
+#define JALOG_PRINTF(...)
 
 #endif
 
