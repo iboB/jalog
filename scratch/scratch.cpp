@@ -34,6 +34,7 @@ int main()
     JALOG_PRINTF(Info, "Done %d", 43);
     JALOG(Warning, "Result was calculated but not really good ", 3.33);
     JALOG(Info, "Going further");
+    JALOG(Info, "Doing stuff: ", true);
     JALOG(Error, "Something bad happened");
     JALOG(Critical, "Something REALLY bad happened");
 

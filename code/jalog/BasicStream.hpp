@@ -47,6 +47,13 @@ public:
         return *this;
     }
 
+    Self& operator,(bool b)
+    {
+        if (b) m_streambuf.sputn("true", 4);
+        else m_streambuf.sputn("false", 5);
+        return *this;
+    }
+
     Self& operator,(char c) { m_streambuf.sputc(c); return *this; }
     Self& operator,(std::string_view s) { m_streambuf.sputn(s.data(), s.size()); return *this; }
     Self& operator,(const char* s) { operator,(std::string_view(s)); return *this; }
@@ -62,7 +69,8 @@ public:
 
     // baseful and padded integers
     template <typename I, unsigned Base>
-    Self& operator,(qwrite::wrapped_integer<I, Base> wi) {
+    Self& operator,(qwrite::wrapped_integer<I, Base> wi)
+    {
         qwrite::write_integer(m_streambuf, wi);
         return *this;
     }
