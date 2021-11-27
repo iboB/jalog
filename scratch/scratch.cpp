@@ -9,6 +9,18 @@
 
 #include <jalog/Printf.hpp>
 
+struct vec { int x, y; };
+
+std::ostream& operator<<(std::ostream& o, const vec& v)
+{
+    return o << v.x << ' ' << v.y;
+}
+
+jalog::BasicStream& operator,(jalog::BasicStream& s, const vec& v)
+{
+    return s, '(', v.x, ';', v.y, ')';
+}
+
 int main()
 {
     auto async = std::make_shared<jalog::AsyncLogging>();
@@ -37,6 +49,9 @@ int main()
     JALOG(Info, "Doing stuff: ", true);
     JALOG(Error, "Something bad happened");
     JALOG(Critical, "Something REALLY bad happened");
+
+    vec v = {1, 2};
+    JALOG(Info, "vec: ", v);
 
     return 0;
 }
