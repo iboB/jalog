@@ -21,16 +21,21 @@ namespace jalog
 template <unsigned Base, typename I>
 auto base(I i) -> qwrite::wrapped_integer<I, Base> { return {i}; }
 
-class StreamUnchecked
+struct endl_t {};
+inline const endl_t endl;
+
+class BasicStream
 {
 public:
-    StreamUnchecked(Scope& scope, Level lvl)
+    BasicStream(Scope& scope, Level lvl)
         : m_scope(scope)
         , m_level(lvl)
         , m_stream(&m_streambuf)
     {}
 
-    ~StreamUnchecked()
+    using Self = BasicStream;
+
+    Self& operator,(endl_t)
     {
         // length before zero-termination
         auto textLength = m_streambuf.poff();
@@ -38,9 +43,9 @@ public:
         m_streambuf.sputc(0);
 
         m_scope.addEntryUnchecked(m_level, std::string_view(m_streambuf.peek_container().data(), textLength));
+        m_streambuf.clear();
+        return *this;
     }
-
-    using Self = StreamUnchecked;
 
     Self& operator,(char c) { m_streambuf.sputc(c); return *this; }
     Self& operator,(std::string_view s) { m_streambuf.sputn(s.data(), s.size()); return *this; }
@@ -69,7 +74,7 @@ public:
             qwrite::write_integer(m_streambuf, qwrite::wrapped_integer<T, 10>{t});
         else if constexpr (std::is_floating_point_v<T>)
             qwrite::write_float(m_streambuf, t);
-        else
+        else // fallback to std::ostream operator <<
             m_stream << t;
         return *this;
     }
