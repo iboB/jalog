@@ -3,7 +3,7 @@ include(icm_testing)
 CPMAddPackage(gh:iboB/doctest-lib@2.4.6)
 
 icm_add_test(
-    NAME qwrite
+    NAME jalog-qwrite
     TARGET test-jalog-qwrite
     LIBRARIES
         doctest-main
