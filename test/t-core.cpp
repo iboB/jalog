@@ -46,9 +46,20 @@ struct TestHelper
         CHECK(e.scope.id() == 3);
         CHECK(e.scope.userData == 4);
     }
+
+    TestSink::EntryCopy popFront()
+    {
+        if (sink->entries.empty()) return {};
+        auto ret = std::move(sink->entries.front());
+        sink->entries.erase(sink->entries.begin());
+        return ret;
+    }
 };
 
 #define tlog(lvl, ...) JALOG_SCOPE(helper.testScope, lvl, __VA_ARGS__)
+#define plog(...) \
+    tlog(Info, __VA_ARGS__); \
+    e = helper.popFront()
 #define tlog2(lvl, ...) JALOG_SCOPE(helper.testScope2, lvl, __VA_ARGS__)
 
 // logging to an unsetupped logger is safe and does nothing
@@ -134,4 +145,58 @@ TEST_CASE("levels")
     REQUIRE(es.size() == 7);
 
     CHECK(std::is_sorted(es.begin(), es.end(), [](auto& a, auto& b) { return a.timestamp < b.timestamp; }));
+}
+
+struct vec { float x, y; };
+
+// have this overload to confitm that the log happens through BasicStream and through std::ostream
+std::ostream& operator<<(std::ostream& o, const vec& v)
+{
+    return o << v.x << ' ' << v.y;
+}
+
+jalog::BasicStream& operator,(jalog::BasicStream& s, const vec& v)
+{
+    return s, '(', v.x, ';', v.y, ')';
+}
+
+struct ivec { int x, y; };
+
+std::ostream& operator<<(std::ostream& o, const ivec& v)
+{
+    return o << v.x << ' ' << v.y;
+}
+
+TEST_CASE("text output")
+{
+    TestHelper helper;
+    TestSink::EntryCopy e;
+
+    // bools
+    plog("b1 = ", true, ", b2 = ", false);
+    CHECK(e.text == "b1 = true, b2 = false");
+
+    // chars
+    plog("\t", 'j', 'a', "log");
+    CHECK(e.text == "\tjalog");
+
+    // ints
+    plog(uint8_t(4), ", ", INT16_MIN, ", ", jalog::base<2>(9), ", ", 1'000'000'000'000ull);
+    CHECK(e.text == "4, -32768, 1001, 1000000000000");
+
+    // floats
+    plog(3.14159f, ", ", 2.718281828);
+    CHECK(e.text == "3.14159, 2.718281828");
+
+    // strings
+    std::string str = "abcde";
+    std::string_view sv(str.c_str() + 1, 3);
+    plog(str, " : ", sv);
+    CHECK(e.text == "abcde : bcd");
+
+    // customs
+    vec v = {3.00f, 1.12f};
+    ivec iv = {5, 6};
+    plog("j: ", v, ", std: ", iv);
+    CHECK(e.text == "j: (3;1.12), std: 5 6");
 }

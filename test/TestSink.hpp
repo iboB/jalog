@@ -24,6 +24,7 @@ public:
 
     struct EntryCopy
     {
+        EntryCopy() = default;
         EntryCopy(const jalog::Entry& e)
             : scope(e.scope)
             , level(e.level)
