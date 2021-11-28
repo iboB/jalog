@@ -8,6 +8,8 @@
 #include <jalog/Sink.hpp>
 #include <jalog/Entry.hpp>
 
+#include "TestTime.hpp"
+
 #include <string>
 #include <cstdint>
 #include <vector>
@@ -25,7 +27,8 @@ public:
         EntryCopy(const jalog::Entry& e)
             : scope(e.scope)
             , level(e.level)
-            , timestamp(std::chrono::duration_cast<std::chrono::nanoseconds>(e.timestamp.time_since_epoch()).count())
+            , timestamp(tonano(e.timestamp))
+            , text(e.text)
         {}
         jalog::ScopeDesc scope;
         jalog::Level level;
