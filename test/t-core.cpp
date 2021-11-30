@@ -10,6 +10,7 @@
 #include "TestSink.hpp"
 
 #include <jalog/Log.hpp>
+#include <jalog/LogPrintf.hpp>
 
 #include <jalog/Logger.hpp>
 
@@ -71,6 +72,9 @@ struct TestHelper
     e = helper.popFront()
 #define tlog2(lvl, ...) JALOG_SCOPE(helper.scope2, lvl, __VA_ARGS__)
 
+#define tlogf(lvl, ...) JALOG_PRINTF_SCOPE(helper.scope, lvl, __VA_ARGS__)
+#define tlogf2(lvl, ...) JALOG_PRINTF_SCOPE(helper.scope2, lvl, __VA_ARGS__)
+
 // logging to an unsetupped logger is safe and does nothing
 TEST_CASE("no setup")
 {
@@ -96,7 +100,7 @@ TEST_CASE("levels and scopes")
     TestHelper helper;
     tlog(Debug, "dbg");
     tlog(Info, "info");
-    tlog(Warning, "warn1");
+    tlogf(Warning, "warn%d", 1);
 
     auto& es = helper.sink->entries;
     REQUIRE(es.size() == 3);
@@ -121,10 +125,10 @@ TEST_CASE("levels and scopes")
         CHECK(e.text == "warn1");
     }
 
-    tlog2(Warning, "warn2");
-    tlog2(Warning, "warn3");
+    tlog2(Warning, "warn", 2);
+    tlogf2(Warning, "warn%d", 3);
     tlog2(Error, "err");
-    tlog(Critical, "crit");
+    tlogf(Critical, "crit");
 
     REQUIRE(es.size() == 7);
     helper.checkChronologicalOrder();
@@ -170,7 +174,7 @@ TEST_CASE("levels")
         tlog(Debug, arg());
         tlog(Info, arg());
         tlog(Warning, arg());
-        tlog(Error, arg());
+        tlogf(Error, "%d", arg());
         tlog(Critical, arg());
     };
 
