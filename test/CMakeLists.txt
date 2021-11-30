@@ -18,3 +18,4 @@ macro(jalog_test test)
 endmacro()
 
 jalog_test(core t-core.cpp)
+jalog_test(defaults t-defaults.cpp)
