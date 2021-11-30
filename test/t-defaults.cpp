@@ -10,6 +10,7 @@
 #include "TestSink.hpp"
 
 #include <jalog/Log.hpp>
+#include <jalog/LogPrintf.hpp>
 #include <jalog/Logger.hpp>
 #include <jalog/DefaultLogger.hpp>
 
@@ -18,9 +19,52 @@ TEST_SUITE_BEGIN("jalog");
 TEST_CASE("default logger/scope")
 {
     auto sink = std::make_shared<TestSink>();
+    auto& es = sink->entries;
     jalog::DefaultLogger().setup()
-        .defaultLevel
-        add(sink);
+        .defaultLevel(jalog::Level::Info)
+        .add(sink);
 
-    JALOG(Info, "foo",
+    JALOG(Debug, "dbg", 1);
+    JALOG_PRINTF(Info, "info%d", 1);
+    JALOG(Error, "error", 1);
+
+    jalog::Scope scope("s1", 1, 2);
+    JALOG_SCOPE(scope, Debug, "dbg", 2);
+    JALOG_SCOPE(scope, Info, "info", 2);
+    JALOG_PRINTF_SCOPE(scope, Critical, "crit%d", 2);
+
+    REQUIRE(es.size() == 4);
+
+    {
+        auto& e = es[0];
+        CHECK(e.scope.label().empty());
+        CHECK(e.scope.id() == 0);
+        CHECK(e.scope.userData == -1);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "info1");
+    }
+    {
+        auto& e = es[1];
+        CHECK(e.scope.label().empty());
+        CHECK(e.scope.id() == 0);
+        CHECK(e.scope.userData == -1);
+        CHECK(e.level == jalog::Level::Error);
+        CHECK(e.text == "error1");
+    }
+    {
+        auto& e = es[2];
+        CHECK(e.scope.label() == "s1");
+        CHECK(e.scope.id() == 1);
+        CHECK(e.scope.userData == 2);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "info2");
+    }
+    {
+        auto& e = es[3];
+        CHECK(e.scope.label() == "s1");
+        CHECK(e.scope.id() == 1);
+        CHECK(e.scope.userData == 2);
+        CHECK(e.level == jalog::Level::Critical);
+        CHECK(e.text == "crit2");
+    }
 }
