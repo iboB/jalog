@@ -93,7 +93,7 @@ TEST_CASE("no setup")
     CHECK(nope == 0);
 }
 
-TEST_CASE("levels and scopes")
+TEST_CASE("sinks and scopes")
 {
     const uint64_t start = nanotime();
 
@@ -275,6 +275,42 @@ TEST_CASE("new scopes")
     }
 }
 
+TEST_CASE("printf")
+{
+    TestHelper helper;
+    auto& es = helper.sink->entries;
+
+    helper.scope.setLevel(jalog::Level::Info);
+
+    tlogf(Debug, "foo"); // should be skipped
+    tlogf(Info, "%d hello %s %.2f", 1, "bb", 3.14159);
+    jalog::Printf(helper.scope, jalog::Level::Debug, "%dabc", 12); // should be skipped
+    jalog::Printf(helper.scope, jalog::Level::Error, "x%dy", 33);
+    jalog::PrintfUnchecked(helper.scope2, jalog::Level::Debug, "hax");
+
+    CHECK(es.size() == 3);
+    helper.checkChronologicalOrder();
+
+    {
+        auto e = helper.popFront();
+        helper.checkT1(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "1 hello bb 3.14");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT1(e);
+        CHECK(e.level == jalog::Level::Error);
+        CHECK(e.text == "x33y");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Debug);
+        CHECK(e.text == "hax");
+    }
+}
+
 struct vec { float x, y; };
 
 // have this overload to confitm that the log happens through BasicStream and through std::ostream
@@ -295,7 +331,7 @@ std::ostream& operator<<(std::ostream& o, const ivec& v)
     return o << v.x << ' ' << v.y;
 }
 
-TEST_CASE("text output")
+TEST_CASE("stream output")
 {
     TestHelper helper;
     TestSink::EntryCopy e;
