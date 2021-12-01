@@ -20,19 +20,26 @@ TEST_SUITE_BEGIN("jalog");
 
 struct TestHelper
 {
-    TestHelper()
+    TestHelper(int numSinks = 2)
         : scope(logger, "t1", 1, 2)
         , scope2(logger, "t2", 3, 4)
-        , sink(std::make_shared<TestSink>())
     {
-        logger.setup().add(sink);
+        REQUIRE(numSinks >= 1);
+        auto setup = logger.setup();
+        for (int i = 0; i < numSinks; ++i) {
+            setup.add(sinks.emplace_back(std::make_shared<TestSink>()));
+        }
     }
 
     jalog::Logger logger;
     jalog::Scope scope;
     jalog::Scope scope2;
 
-    std::shared_ptr<TestSink> sink;
+    std::vector<std::shared_ptr<TestSink>> sinks;
+
+    TestSink& sink() {
+        return *sinks.front();
+    }
 
     static void checkT1(const TestSink::EntryCopy& e)
     {
@@ -48,17 +55,38 @@ struct TestHelper
         CHECK(e.scope.userData == 4);
     }
 
-    void checkChronologicalOrder()
+    void checkSinks()
     {
-        auto& es = sink->entries;
-        CHECK(std::is_sorted(es.begin(), es.end(), [](auto& a, auto& b) {
+        const auto& es0 = sink().entries;
+        CHECK(std::is_sorted(es0.begin(), es0.end(), [](auto& a, auto& b) {
             return a.timestamp < b.timestamp;
         }));
+
+        // now check whether all sinks contain the same data
+        if (sinks.size() == 1) return;
+        for (size_t i = 1; i < sinks.size(); ++i)
+        {
+            const auto& es = sinks[i]->entries;
+            CHECK(es0.size() == es.size());
+            for (size_t ei = 0; ei < es0.size(); ++ei)
+            {
+                auto& e0 = es0[ei];
+                auto& e = es[ei];
+                CHECK(&e0 != &e);
+
+                CHECK(e0.scope.label() == e.scope.label());
+                CHECK(e0.scope.id() == e.scope.id());
+                CHECK(e0.scope.userData == e.scope.userData);
+                CHECK(e0.level == e.level);
+                CHECK(e0.timestamp == e.timestamp);
+                CHECK(e0.text == e.text);
+            }
+        }
     }
 
     TestSink::EntryCopy popFront()
     {
-        auto& es = sink->entries;
+        auto& es = sink().entries;
         if (es.empty()) return {};
         auto ret = std::move(es.front());
         es.erase(es.begin());
@@ -93,16 +121,16 @@ TEST_CASE("no setup")
     CHECK(nope == 0);
 }
 
-TEST_CASE("sinks and scopes")
+TEST_CASE("scopes")
 {
     const uint64_t start = nanotime();
 
-    TestHelper helper;
+    TestHelper helper(3);
     tlog(Debug, "dbg");
     tlog(Info, "info");
     tlogf(Warning, "warn%d", 1);
 
-    auto& es = helper.sink->entries;
+    auto& es = helper.sink().entries;
     REQUIRE(es.size() == 3);
 
     {
@@ -131,7 +159,7 @@ TEST_CASE("sinks and scopes")
     tlogf(Critical, "crit");
 
     REQUIRE(es.size() == 7);
-    helper.checkChronologicalOrder();
+    helper.checkSinks();
 
     {
         auto& e = es[3];
@@ -162,7 +190,7 @@ TEST_CASE("sinks and scopes")
 TEST_CASE("levels")
 {
     TestHelper helper;
-    auto& es = helper.sink->entries;
+    auto& es = helper.sink().entries;
 
     // shouldn't affect already created scopes
     helper.logger.setDefaultLevel(jalog::Level::Off);
@@ -227,9 +255,9 @@ TEST_CASE("new scopes")
         tlog(Debug, "baz");
     }
 
-    auto& es = helper.sink->entries;
+    auto& es = helper.sink().entries;
     CHECK(es.size() == 6);
-    helper.checkChronologicalOrder();
+    helper.checkSinks();
 
     {
         auto e = helper.popFront();
@@ -278,7 +306,7 @@ TEST_CASE("new scopes")
 TEST_CASE("printf")
 {
     TestHelper helper;
-    auto& es = helper.sink->entries;
+    auto& es = helper.sink().entries;
 
     helper.scope.setLevel(jalog::Level::Info);
 
@@ -289,7 +317,7 @@ TEST_CASE("printf")
     jalog::PrintfUnchecked(helper.scope2, jalog::Level::Debug, "hax");
 
     CHECK(es.size() == 3);
-    helper.checkChronologicalOrder();
+    helper.checkSinks();
 
     {
         auto e = helper.popFront();
