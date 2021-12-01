@@ -16,6 +16,8 @@
 
 TEST_SUITE_BEGIN("jalog");
 
+jalog::Scope gscope("g", 10, 20);
+
 TEST_CASE("default logger/scope")
 {
     auto sink = std::make_shared<TestSink>();
@@ -33,7 +35,10 @@ TEST_CASE("default logger/scope")
     JALOG_SCOPE(scope, Info, "info", 2);
     JALOG_PRINTF_SCOPE(scope, Critical, "crit%d", 2);
 
-    REQUIRE(es.size() == 4);
+    JALOG_PRINTF_SCOPE(gscope, Debug, "dbg%d", 3);
+    JALOG_SCOPE(gscope, Error, "err", 3);
+
+    REQUIRE(es.size() == 5);
 
     {
         auto& e = es[0];
@@ -66,5 +71,13 @@ TEST_CASE("default logger/scope")
         CHECK(e.scope.userData == 2);
         CHECK(e.level == jalog::Level::Critical);
         CHECK(e.text == "crit2");
+    }
+    {
+        auto& e = es[4];
+        CHECK(e.scope.label() == "g");
+        CHECK(e.scope.id() == 10);
+        CHECK(e.scope.userData == 20);
+        CHECK(e.level == jalog::Level::Error);
+        CHECK(e.text == "err3");
     }
 }
