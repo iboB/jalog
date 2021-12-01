@@ -56,7 +56,7 @@ private:
 
     // setup
     friend class LoggerSetupDSL;
-    void addSink(std::shared_ptr<Sink> sink);
+    void addSink(SinkPtr sink);
     void initialize();
     std::vector<SinkPtr> m_sinks;
     bool m_initialized = false;

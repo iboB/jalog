@@ -17,6 +17,7 @@ namespace jalog
 class AsyncLogging;
 
 class JALOG_API AsyncLoggingThread {
+    // implemented in AsyncLogging.cpp
 public:
     AsyncLoggingThread(AsyncLogging& source, std::string_view threadName = "jalog");
     ~AsyncLoggingThread();

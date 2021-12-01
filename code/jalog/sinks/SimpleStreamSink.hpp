@@ -26,6 +26,19 @@ public:
         , m_err(err)
     {}
 
+    static constexpr std::string_view levelToString(Level l)
+    {
+        switch (l)
+        {
+        case Level::Debug:   return "debug";
+        case Level::Info:    return "Info ";
+        case Level::Warning: return "Warn ";
+        case Level::Error:   return "ERROR";
+        case Level::Critical:return "CRIT!";
+        default: return "  ?  ";
+        }
+    }
+
     virtual void record(const Entry& entry) override {
         auto& out = [&, this]() -> std::ostream& {
             if (entry.level < Level::Error) return m_out;
@@ -58,7 +71,7 @@ public:
         }
 
         // level
-        out << " [" << Level_toString(entry.level) << "] ";
+        out << " [" << levelToString(entry.level) << "] ";
 
         // text
         out << entry.text << "\n";

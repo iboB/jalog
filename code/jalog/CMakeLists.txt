@@ -2,7 +2,6 @@ icm_add_lib(jalog JALOG
     API.h
 
     Level.hpp
-    LevelString.hpp
     ScopeDesc.hpp
     Entry.hpp
 
@@ -15,8 +14,6 @@ icm_add_lib(jalog JALOG
     AsyncLogging.cpp
     AsyncLoggingThread.hpp
 
-    Log.hpp
-
     Sink.hpp
     Sink.cpp
 
@@ -27,6 +24,9 @@ icm_add_lib(jalog JALOG
 
     Printf.hpp
     Printf.cpp
+
+    Log.hpp
+    LogPrintf.hpp
 )
 
 target_include_directories(jalog INTERFACE ..)

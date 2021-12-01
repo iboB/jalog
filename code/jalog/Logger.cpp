@@ -40,7 +40,7 @@ Level Logger::defaultLevel() const
     return m_defaultLevel;
 }
 
-void Logger::addSink(std::shared_ptr<Sink> sink)
+void Logger::addSink(SinkPtr sink)
 {
     std::lock_guard l(m_mutex);
     assert(!m_initialized);

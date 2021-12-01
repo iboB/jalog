@@ -25,9 +25,10 @@ public:
 
     // if you don't launch the associated thread
     // you are responsible to call update manually
+    // update calls can't be concurrent! (though they don't necessarily need to happen on the same thread)
     void update();
 
-    // safe on any thread
+    // safe on any thread and concurrency
     void add(SinkPtr sink);
     template <typename S>
     void add() { return add(std::make_shared<S>()); }
