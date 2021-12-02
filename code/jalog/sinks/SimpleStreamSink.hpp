@@ -8,7 +8,6 @@
 #pragma once
 #include "../Sink.hpp"
 #include "../Entry.hpp"
-#include "../LevelString.hpp"
 
 #include <iostream>
 #include <iomanip>

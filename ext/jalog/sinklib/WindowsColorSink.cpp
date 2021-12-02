@@ -10,7 +10,6 @@
 #if defined(_WIN32)
 
 #include <jalog/Entry.hpp>
-#include <jalog/LevelString.hpp>
 #include <jalog/sinks/SimpleStreamSink.hpp>
 
 #include <itlib/time_t.hpp>
