@@ -17,7 +17,7 @@
 
 #define JALOG_PRINTF_SCOPE(scope, lvl, fmt, ...) \
     if (scope.enabled(::jalog::Level::lvl)) \
-        ::jalog::PrintfUnchecked(scope, ::jalog::Level::lvl, fmt, __VA_ARGS__)
+        ::jalog::PrintfUnchecked(scope, ::jalog::Level::lvl, fmt, ##__VA_ARGS__)
 
 #define JALOG_PRINTF(lvl, ...) JALOG_PRINTF_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
 
