@@ -38,7 +38,7 @@ public:
     Stream& operator<<(const T& t)
     {
         if (!m_enabled) return *this;
-        BasicStream::operator,(t);
+        static_cast<BasicStream&>(*this), t;
         return *this;
     }
 

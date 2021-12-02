@@ -375,7 +375,7 @@ TEST_CASE("stream")
     {
         jalog::Stream str(helper.scope2);
 
-        str << "foo" << vec{1.2f, 2.1f} << jalog::endl;
+        str << "foo " << vec{1.2f, 2.1f} << jalog::endl;
 
         str << jalog::Level::Debug << "dbg2"; // skipped
         str << jalog::Level::Error << "err";
@@ -384,6 +384,32 @@ TEST_CASE("stream")
     }
 
     CHECK(es.size() == 4);
+    helper.checkSinks();
+
+    {
+        auto e = helper.popFront();
+        helper.checkT1(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "hello 1 2");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "foo (1.2;2.1)");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Error);
+        CHECK(e.text == "err10");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "info2");
+    }
 }
 
 TEST_CASE("stream output")

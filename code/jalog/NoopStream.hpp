@@ -16,6 +16,6 @@ class NoopStream
 public:
     template <typename T>
     NoopStream& operator<<(const T&) { return *this; }
-}
+};
 
 }
