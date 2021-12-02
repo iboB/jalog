@@ -11,6 +11,7 @@
 
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
+#include <jalog/LogStream.hpp>
 
 #include <jalog/Logger.hpp>
 
@@ -357,6 +358,32 @@ struct ivec { int x, y; };
 std::ostream& operator<<(std::ostream& o, const ivec& v)
 {
     return o << v.x << ' ' << v.y;
+}
+
+#define tstream(lvl) JALOG_STREAM_SCOPE(helper.scope, lvl)
+
+TEST_CASE("stream")
+{
+    TestHelper helper;
+    auto& es = helper.sink().entries;
+    helper.scope.setLevel(jalog::Level::Info);
+    helper.scope2.setLevel(jalog::Level::Info);
+
+    tstream(Info) << "hello " << ivec{1, 2};
+    tstream(Debug) << "dbg"; // skipped
+
+    {
+        jalog::Stream str(helper.scope2);
+
+        str << "foo" << vec{1.2f, 2.1f} << jalog::endl;
+
+        str << jalog::Level::Debug << "dbg2"; // skipped
+        str << jalog::Level::Error << "err";
+        str << jalog::base<2>(2);
+        str << jalog::Level::Info << "info" << 2;
+    }
+
+    CHECK(es.size() == 4);
 }
 
 TEST_CASE("stream output")

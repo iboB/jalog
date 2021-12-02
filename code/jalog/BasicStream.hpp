@@ -35,7 +35,7 @@ public:
 
     using Self = BasicStream;
 
-    Self& operator,(endl_t)
+    void flush()
     {
         // length before zero-termination
         auto textLength = m_streambuf.poff();
@@ -44,6 +44,11 @@ public:
 
         m_scope.addEntryUnchecked(m_level, std::string_view(m_streambuf.peek_container().data(), textLength));
         m_streambuf.clear();
+    }
+
+    Self& operator,(endl_t)
+    {
+        flush();
         return *this;
     }
 
@@ -87,7 +92,7 @@ public:
         return *this;
     }
 
-private:
+protected:
     Scope& m_scope;
     Level m_level;
 
