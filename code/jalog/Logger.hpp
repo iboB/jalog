@@ -9,7 +9,7 @@
 #include "API.h"
 
 #include "Level.hpp"
-#include "LoggerSetupDSL.hpp"
+#include "SinkPtr.hpp"
 
 #include <vector>
 #include <mutex>
@@ -31,7 +31,20 @@ public:
     Logger(Logger&&) = delete;
     Logger& operator=(Logger&&) = delete;
 
-    LoggerSetupDSL setup() { return LoggerSetupDSL(*this); }
+    class JALOG_API SetupDSL
+    {
+    public:
+        explicit SetupDSL(Logger& l);
+        ~SetupDSL();
+        SetupDSL& defaultLevel(Level lvl);
+        SetupDSL& add(SinkPtr sink);
+        template <typename S>
+        SetupDSL& add() { return add(std::make_shared<S>()); }
+    private:
+        Logger& m_logger;
+    };
+
+    SetupDSL directSetup() { return SetupDSL(*this); }
 
     // default level for newly created scopes
     // scopes set their own level afterwards
@@ -55,7 +68,6 @@ private:
     mutable std::mutex m_mutex;
 
     // setup
-    friend class LoggerSetupDSL;
     void addSink(SinkPtr sink);
     void initialize();
     std::vector<SinkPtr> m_sinks;

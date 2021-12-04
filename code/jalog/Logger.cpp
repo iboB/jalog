@@ -107,20 +107,20 @@ void Logger::unregisterScope(Scope& scope)
     *slot = nullptr;
 }
 
-LoggerSetupDSL::LoggerSetupDSL(Logger& l) : m_logger(l) {};
+Logger::SetupDSL::SetupDSL(Logger& l) : m_logger(l) {};
 
-LoggerSetupDSL::~LoggerSetupDSL()
+Logger::SetupDSL::~SetupDSL()
 {
     m_logger.initialize();
 }
 
-LoggerSetupDSL& LoggerSetupDSL::defaultLevel(Level lvl)
+Logger::SetupDSL& Logger::SetupDSL::defaultLevel(Level lvl)
 {
     m_logger.setDefaultLevel(lvl);
     return *this;
 }
 
-LoggerSetupDSL& LoggerSetupDSL::add(SinkPtr sink)
+Logger::SetupDSL& Logger::SetupDSL::add(SinkPtr sink)
 {
     m_logger.addSink(std::move(sink));
     return *this;

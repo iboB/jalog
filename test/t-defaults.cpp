@@ -22,7 +22,7 @@ TEST_CASE("default logger/scope")
 {
     auto sink = std::make_shared<TestSink>();
     auto& es = sink->entries;
-    jalog::DefaultLogger().setup()
+    jalog::DefaultLogger().directSetup()
         .defaultLevel(jalog::Level::Info)
         .add(sink);
 

@@ -27,7 +27,7 @@ int main()
 
     async->add<jalog::sinklib::ColorSink>();
 
-    jalog::DefaultLogger().setup()
+    jalog::DefaultLogger().directSetup()
         .add(async);
 
     jalog::AsyncLoggingThread lt(*async);

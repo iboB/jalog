@@ -26,7 +26,7 @@ struct TestHelper
         , scope2(logger, "t2", 3, 4)
     {
         REQUIRE(numSinks >= 1);
-        auto setup = logger.setup();
+        auto setup = logger.directSetup();
         for (int i = 0; i < numSinks; ++i) {
             setup.add(sinks.emplace_back(std::make_shared<TestSink>()));
         }
