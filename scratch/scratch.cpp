@@ -1,11 +1,9 @@
 #include <jalog/DefaultLogger.hpp>
-#include <jalog/Logger.hpp>
+#include <jalog/Instance.hpp>
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
 
 #include <jalog/sinklib/ColorSink.hpp>
-#include <jalog/AsyncLogging.hpp>
-#include <jalog/AsyncLoggingThread.hpp>
 
 #include <jalog/Printf.hpp>
 
@@ -23,14 +21,8 @@ jalog::BasicStream& operator,(jalog::BasicStream& s, const vec& v)
 
 int main()
 {
-    auto async = std::make_shared<jalog::AsyncLogging>();
-
-    async->add<jalog::sinklib::ColorSink>();
-
-    jalog::DefaultLogger().directSetup()
-        .add(async);
-
-    jalog::AsyncLoggingThread lt(*async);
+    jalog::Instance jl;
+    jl.setup().async().add<jalog::sinklib::ColorSink>();
 
     jalog::Scope Algos("Algorithms");
 

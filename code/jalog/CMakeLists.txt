@@ -27,6 +27,9 @@ icm_add_lib(jalog JALOG
 
     Log.hpp
     LogPrintf.hpp
+
+    Instance.hpp
+    Instance.cpp
 )
 
 target_include_directories(jalog INTERFACE ..)

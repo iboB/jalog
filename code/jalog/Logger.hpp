@@ -19,6 +19,7 @@ namespace jalog
 
 class Sink;
 class Scope;
+class Instance;
 
 class JALOG_API Logger
 {
@@ -68,6 +69,7 @@ private:
     mutable std::mutex m_mutex;
 
     // setup
+    friend class Instance;
     void addSink(SinkPtr sink);
     void initialize();
     std::vector<SinkPtr> m_sinks;

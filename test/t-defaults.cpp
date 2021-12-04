@@ -11,8 +11,8 @@
 
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
-#include <jalog/Logger.hpp>
 #include <jalog/DefaultLogger.hpp>
+#include <jalog/Instance.hpp>
 
 TEST_SUITE_BEGIN("jalog");
 
@@ -22,7 +22,8 @@ TEST_CASE("default logger/scope")
 {
     auto sink = std::make_shared<TestSink>();
     auto& es = sink->entries;
-    jalog::DefaultLogger().directSetup()
+    jalog::Instance i;
+    i.setup()
         .defaultLevel(jalog::Level::Info)
         .add(sink);
 
