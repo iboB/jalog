@@ -5,8 +5,6 @@
 // See accompanying file LICENSE.txt or copy at
 // https://opensource.org/licenses/MIT
 //
-#include <doctest/doctest.h>
-
 #include "TestSink.hpp"
 
 #include <jalog/Log.hpp>
@@ -14,8 +12,6 @@
 #include <jalog/LogStream.hpp>
 
 #include <jalog/Logger.hpp>
-
-#include <algorithm>
 
 TEST_SUITE_BEGIN("jalog");
 
@@ -58,30 +54,13 @@ struct TestHelper
 
     void checkSinks()
     {
-        const auto& es0 = sink().entries;
-        CHECK(std::is_sorted(es0.begin(), es0.end(), [](auto& a, auto& b) {
-            return a.timestamp < b.timestamp;
-        }));
+        TestSink::checkSortedEntries(sink().entries);
 
         // now check whether all sinks contain the same data
         if (sinks.size() == 1) return;
         for (size_t i = 1; i < sinks.size(); ++i)
         {
-            const auto& es = sinks[i]->entries;
-            CHECK(es0.size() == es.size());
-            for (size_t ei = 0; ei < es0.size(); ++ei)
-            {
-                auto& e0 = es0[ei];
-                auto& e = es[ei];
-                CHECK(&e0 != &e);
-
-                CHECK(e0.scope.label() == e.scope.label());
-                CHECK(e0.scope.id() == e.scope.id());
-                CHECK(e0.scope.userData == e.scope.userData);
-                CHECK(e0.level == e.level);
-                CHECK(e0.timestamp == e.timestamp);
-                CHECK(e0.text == e.text);
-            }
+            sink().checkSameEntries(*sinks[i]);
         }
     }
 
