@@ -3,9 +3,13 @@
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
 
+#include <jalog/sinks/SimpleStdioSink.hpp>
+#include <jalog/sinks/SimpleOStreamSink.hpp>
 #include <jalog/sinklib/ColorSink.hpp>
 
 #include <jalog/Printf.hpp>
+
+#include <iostream>
 
 struct vec { int x, y; };
 
@@ -22,7 +26,10 @@ jalog::BasicStream& operator,(jalog::BasicStream& s, const vec& v)
 int main()
 {
     jalog::Instance jl;
-    jl.setup().async().add<jalog::sinklib::ColorSink>();
+    jl.setup().async()
+        .add<jalog::sinklib::ColorSink>()
+        .add<jalog::sinks::SimpleStdioSink>()
+        .add<jalog::sinks::SimpleOStreamSink>(std::cout, std::cerr);
 
     jalog::Scope Algos("Algorithms");
 

@@ -9,7 +9,7 @@
 #include "../Sink.hpp"
 #include "../Entry.hpp"
 
-#include <iostream>
+#include <ostream>
 #include <iomanip>
 
 #include <itlib/time_t.hpp>
@@ -17,10 +17,10 @@
 namespace jalog::sinks
 {
 
-class SimpleStreamSink : public Sink
+class SimpleOStreamSink : public Sink
 {
 public:
-    SimpleStreamSink(std::ostream& out, std::ostream& err)
+    SimpleOStreamSink(std::ostream& out, std::ostream& err)
         : m_out(out)
         , m_err(err)
     {}
@@ -38,7 +38,7 @@ public:
         }
     }
 
-    virtual void record(const Entry& entry) override {
+    virtual void record(const Entry& entry) final override {
         auto& out = [&, this]() -> std::ostream& {
             if (entry.level < Level::Error) return m_out;
             return m_err;
@@ -65,7 +65,7 @@ public:
             auto lbl = entry.scope.label();
             if (!lbl.empty())
             {
-                out << " [" << lbl << "]";
+                out << " " << lbl;
             }
         }
 
@@ -79,12 +79,6 @@ public:
 private:
     std::ostream& m_out;
     std::ostream& m_err;
-};
-
-class SimpleConsoleSink : public SimpleStreamSink
-{
-public:
-    SimpleConsoleSink() : SimpleStreamSink(std::cout, std::cerr) {}
 };
 
 }
