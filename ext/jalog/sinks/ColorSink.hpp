@@ -9,8 +9,8 @@
 
 #if defined(_WIN32)
 #include "WindowsColorSink.hpp"
-namespace jalog::sinklib { using ColorSink = WindowsColorSink; }
+namespace jalog::sinks { using ColorSink = WindowsColorSink; }
 #else
 #include "AnsiColorSink.hpp"
-namespace jalog::sinklib { using ColorSink = AnsiColorSink; }
+namespace jalog::sinks { using ColorSink = AnsiColorSink; }
 #endif

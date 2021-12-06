@@ -20,7 +20,7 @@
 #include <wincon.h>
 
 
-namespace jalog::sinklib
+namespace jalog::sinks
 {
 
 WindowsColorSink::WindowsColorSink()

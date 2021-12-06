@@ -13,7 +13,7 @@
 
 #include <cstdio>
 
-namespace jalog::sinklib
+namespace jalog::sinks
 {
 
 void AnsiColorSink::record(const Entry& entry)

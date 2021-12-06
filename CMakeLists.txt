@@ -37,7 +37,7 @@ CPMAddPackage(gh:iboB/mscharconv@1.1.1)
 add_subdirectory(code/jalog)
 
 if(JALOG_BUILD_SINKLIB)
-    add_subdirectory(ext/jalog/sinklib)
+    add_subdirectory(ext/jalog/sinks)
 endif()
 
 if(ICM_DEV_MODE)

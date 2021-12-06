@@ -5,7 +5,7 @@
 
 #include <jalog/sinks/SimpleStdioSink.hpp>
 #include <jalog/sinks/SimpleOStreamSink.hpp>
-#include <jalog/sinklib/ColorSink.hpp>
+#include <jalog/sinks/ColorSink.hpp>
 
 #include <jalog/Printf.hpp>
 
@@ -27,7 +27,7 @@ int main()
 {
     jalog::Instance jl;
     jl.setup().async()
-        .add<jalog::sinklib::ColorSink>()
+        .add<jalog::sinks::ColorSink>()
         .add<jalog::sinks::SimpleStdioSink>()
         .add<jalog::sinks::SimpleOStreamSink>(std::cout, std::cerr);
 
