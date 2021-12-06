@@ -10,7 +10,7 @@
 #if defined(_WIN32)
 
 #include <jalog/Entry.hpp>
-#include <jalog/sinks/SimpleStreamSink.hpp>
+#include <jalog/sinks/SimpleStdioSink.hpp>
 
 #include <itlib/time_t.hpp>
 
@@ -68,7 +68,7 @@ void WindowsColorSink::record(const Entry& entry)
     {
         // output is not a console
         // do a redirect
-        sinks::SimpleConsoleSink{}.record(entry);
+        sinks::SimpleStdioSink(stdout, stderr).record(entry);
         return;
     }
 
