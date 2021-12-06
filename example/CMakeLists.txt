@@ -5,3 +5,4 @@ macro(jalog_example example)
 endmacro()
 
 jalog_example(HelloWorld e-HelloWorld.cpp)
+jalog_example(BasicShowcase e-BasicShowcase.cpp)
