@@ -30,8 +30,8 @@ public:
         ~SetupDSL();
         SetupDSL& defaultLevel(Level lvl);
         SetupDSL& add(SinkPtr sink);
-        template <typename S>
-        SetupDSL& add() { return add(std::make_shared<S>()); }
+        template <typename S, typename... Args>
+        SetupDSL& add(Args&&... args) { return add(std::make_shared<S>(std::forward<Args>(args)...)); }
         SetupDSL& async();
     private:
         Instance& m_instance;
