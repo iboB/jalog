@@ -4,8 +4,10 @@
 
 Just Another Logging library for C++17.
 
+## Features
+
 * Synchronous and asynchronous logging
-* Fixed log levels: Debug, Info, Warning, Error, Critical
+* Five fixed log levels: Debug, Info, Warning, Error, Critical
 * Custom log scopes (categories).
 * Custom log sinks and some predefined ones.
 * Allows multiple independent loggers
@@ -17,9 +19,11 @@ Just Another Logging library for C++17.
     * Jalog-style: `log("This is Jalog: ", 12, " and ", 3.141592);`
     * `std::ostream`-like: `log << "This and " << 42;`
     * `printf`-like: `log("Crushing it since %d", 1971);`
-    * raw (which allows you to provide your own style, say `std::fmt`)
+    * raw (which allows you to provide your own style, say `std::format`)
 
-Here is a small snippet showcasing some of the library's features:
+## Example
+
+A small snippet showcasing some of the library's features:
 
 *It also exists as a complete and buildable example [here](example/e-BasicShowcase.cpp).*
 
@@ -38,8 +42,6 @@ Person alice = {"Alice", 34};
 JALOG(Error, "Log types with custom ostream output: ", alice);
 
 JALOG_PRINTF(Critical, "Log printf style: %d, %.3f, %s", 43, 3.14159, str.c_str());
-
-return 0;
 ```
 
 This will produce an output similar to this:
