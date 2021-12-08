@@ -51,6 +51,7 @@ This will produce an output similar to this:
 
 ## Documentation
 
+* [Features and Glossary](doc/features.md)
 * [Adding Jalog to your project](doc/how-to-add.md)
 
 ## Building and Usage
