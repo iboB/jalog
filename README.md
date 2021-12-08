@@ -11,6 +11,7 @@ Just Another Logging library for C++17.
 * Custom log scopes (categories).
 * Custom log sinks and some predefined ones.
 * Allows multiple independent loggers
+* Thread safe
 * Optimized for (in that order):
     * Performance
     * Ease of use
@@ -50,7 +51,7 @@ This will produce an output similar to this:
 
 ## Documentation
 
-*Still WiP*
+* [Adding Jalog to your project](doc/how-to-add.md)
 
 ## Building and Usage
 
