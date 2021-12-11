@@ -34,8 +34,6 @@ Sinks are the places where the log messages "go". `jalog::Sink` is a class with 
 
 The library itself provides two "bare-bones" sinks, and additional sinks are available in the [Jalog.Sinklib](sinklib.md) extension library.
 
+# Loggers
 
-
-
-
-
+The Logger is the central instance where sinks and scopes are registered. Typically the embedded default logger is used for everything, but Jalog supports multiple loggers.

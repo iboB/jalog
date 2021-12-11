@@ -53,6 +53,16 @@ This will produce an output similar to this:
 
 * [Features and Glossary](doc/features.md)
 * [Adding Jalog to your project](doc/how-to-add.md)
+* [The Basics](doc/basics.md)
+* [Asynchronous Logging](doc/async.md)
+* [Creating Scopes](doc/creating-scopes.md)
+* [Logging: Macros, Styles, Custom Types](doc/logging.md)
+* [Custom Sinks](doc/custom-sinks.md)
+* Advanced topics:
+    * [Using Multiple Loggers](doc/multiple-loggers.md)
+    * [Custom Async Logging](doc/custom-async.md)
+    * [Inheriting from Scope](doc/inherit-scope.md)
+    * [Development and Implementation Notes](doc/dev.md)
 
 ## Building and Usage
 
@@ -60,9 +70,13 @@ There is an accompanying `CMakeLists.txt` file in the repo. Use CMake to generat
 
 The library uses [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) to manage its dependencies and the best way to use it is as a CPM.cmake pacakge.
 
+See [Adding Jalog to your project](doc/how-to-add.md) for more info.
+
 ## Contributing
 
 Issues and pull requests are welcome.
+
+See [Development and Implementation Notes](doc/dev.md) on how to work on Jalog.
 
 ## License
 
