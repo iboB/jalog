@@ -4,7 +4,7 @@ Jalog is a logging library written with performance in mind. It doesn't provide 
 
 Jalog supports synchronous and asynchronous logging and is generally thread safe (though it is possible to create sinks which are not thread safe).
 
-Jalog promotes (though does not require) the use of macros for logging as they allow better flexibility in terms of what is compiled and what not. Aother benefit of using macros in this case is that we can afford to wrap the underlying call in an if-check at the call site.
+Jalog promotes (though does not require) the use of macros for logging as they allow better flexibility in terms of what is compiled and what not. Another benefit of using macros in this case is that we can afford to wrap the underlying call in an if-check at the call site.
 
 ## Levels
 
@@ -34,6 +34,6 @@ Sinks are the places where the log messages "go". `jalog::Sink` is a class with 
 
 The library itself provides two "bare-bones" sinks, and additional sinks are available in the [Jalog.Sinklib](sinklib.md) extension library.
 
-# Loggers
+## Loggers
 
-The Logger is the central instance where sinks and scopes are registered. Typically the embedded default logger is used for everything, but Jalog supports multiple loggers.
+The Logger is the central instance where sinks and scopes are registered. Typically the built-in default logger is used for everything, but Jalog supports multiple loggers.
