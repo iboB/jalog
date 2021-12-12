@@ -30,8 +30,8 @@ public:
 
     // safe on any thread and concurrency
     void add(SinkPtr sink);
-    template <typename S>
-    void add() { return add(std::make_shared<S>()); }
+    template <typename S, typename... Args>
+    void add(Args&&... args) { return add(std::make_shared<S>(std::forward<Args>(args)...)); }
     void remove(const Sink* sink);
     void remove(const SinkPtr& sink) { remove(sink.get()); }
 
