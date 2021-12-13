@@ -60,7 +60,6 @@ This will produce an output similar to this:
 * [Custom Sinks](doc/custom-sinks.md)
 * Advanced topics:
     * [Using Multiple Loggers](doc/multiple-loggers.md)
-    * [Custom Async Logging](doc/custom-async.md)
     * [Inheriting from Scope](doc/inherit-scope.md)
     * [Development and Implementation Notes](doc/dev.md)
 
