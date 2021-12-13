@@ -32,7 +32,7 @@ jalog::Instance jl;
 {
     auto setup = jl.setup();
     setup.add<jalog::sinks::ColorSink>();
-    setup.add(mysink)
+    setup.add(mysink);
     setup.defaultLevel(jalog::Level::Info);
 }
 ```
