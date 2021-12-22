@@ -19,6 +19,8 @@ jl.setup()
 
 This will lead to a separate thread being launched and log messages will be enqueued in to be consumed by the two asynchronous sinks.
 
+A complete, buildable example of asynchronous logging can be found [here](../example/e-AsyncLogging.cpp).
+
 ## Manual Setup
 
 Setting up asynchronous logging can also be done manually. You will need to create a shared pointer of `jalog::AsyncLogging` and then add it to a `jalog::Instance`'s setup as if it is a sink (which, by the way, it actually is). You can add (or remove) sinks from your `AsyncLogging` object at any time (as opposed to `jalog::Instance` which gives you this opportunity only once on setup).
