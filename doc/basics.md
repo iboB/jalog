@@ -53,7 +53,7 @@ JALOG(Debug, "Some integer ", 5);
 JALOG(Error, "Some value: ", value, " and another: ", another);
 ```
 
-Jalog supports values which have an associated overloaded `operator<<` for `std::ostream`. Addin them as arguemnts will compile and work as expected.
+Jalog supports values which have an associated overloaded `operator<<` for `std::ostream`. Adding them as arguments will compile and work as expected.
 
 ## Complete Example
 

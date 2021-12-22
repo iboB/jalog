@@ -43,4 +43,4 @@ Note that you don't *have* to start the built-in `AsyncLoggingThread`. You can m
 
 ## Custom Asynchronous Logging
 
-Of course you don't have to use the built-in asynchronous logging capabilities of Jalog and still have asynchronous logging. As we mentioned above `jalog::AsyncLogging` is just a `jalog::Sink`. You can create your own object derived from `jalog::Sink` to do asynchronous logging which is besst suited for your needs and environment.
+Of course you don't have to use the built-in asynchronous logging capabilities of Jalog and still have asynchronous logging. As we mentioned above `jalog::AsyncLogging` is just a `jalog::Sink`. You can create your own object derived from `jalog::Sink` to do asynchronous logging which is best suited for your needs and environment.
