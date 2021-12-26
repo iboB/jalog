@@ -63,4 +63,8 @@ In most cases this will be significantly faster than using `std::ostream` (and n
 
 ## Stream Style Logging
 
+Jalog also supports stream-style logging with `operator<<`.
+
 ## `printf` Style Logging
+
+Jalog supports `printf` style logging and with it can be used to provide a function pointer to libraries (including plain C ones) which support external printf-style log functions.
