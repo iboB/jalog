@@ -41,12 +41,16 @@ public:
 
     Logger& logger() { return m_logger; }
 
+#if !JALOG_NO_BUILTIN_ASYNC
     AsyncLogging* asyncLogging() { return m_asyncLogging.get(); }
+#endif
 
 private:
     Logger& m_logger;
+#if !JALOG_NO_BUILTIN_ASYNC
     std::shared_ptr<AsyncLogging> m_asyncLogging;
     std::unique_ptr<AsyncLoggingThread> m_asyncLoggingThread;
+#endif
 };
 
 }

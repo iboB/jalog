@@ -20,6 +20,7 @@ include(icm_add_lib)
 #######################################
 # options
 option(JALOG_STATIC "jalog: build as static lib" OFF)
+option(JALOG_NO_BUILTIN_ASYNC "jalog: disable builtin async logging helpers" OFF)
 option(JALOG_BUILD_SINKLIB "jalog: build extension sinklib" ON)
 option(JALOG_BUILD_TESTS "jalog: build tests" ${ICM_DEV_MODE})
 option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
@@ -28,8 +29,11 @@ option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 # packages
 CPMAddPackage(gh:iboB/splat@1.1.0)
 CPMAddPackage(gh:iboB/itlib@1.4.5)
-CPMAddPackage(gh:iboB/xec@1.3.1)
 CPMAddPackage(gh:iboB/mscharconv@1.1.1)
+
+if(NOT JALOG_NO_BUILTIN_ASYNC)
+    CPMAddPackage(gh:iboB/xec@1.3.1)
+endif()
 
 #######################################
 # subdirs
