@@ -1,3 +1,10 @@
+// jalog
+// Copyright (c) 2021-2022 Borislav Stanimirov
+//
+// Distributed under the MIT Software License
+// See accompanying file LICENSE.txt or copy at
+// https://opensource.org/licenses/MIT
+//
 #include <jalog/Instance.hpp>
 #include <jalog/sinks/ColorSink.hpp>
 #include <jalog/Log.hpp>
