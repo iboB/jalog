@@ -63,8 +63,56 @@ In most cases this will be significantly faster than using `std::ostream` (and n
 
 ## Stream Style Logging
 
-Jalog also supports stream-style logging with `operator<<`.
+Jalog also supports stream-style logging with `operator<<`. Note that this is not done by inheriting from `std::ostream`. Jalog provides it's own class `jalog::Stream` which has an overload for `operator<<`.
+
+The benefit of `jalog::Stream` is that it can be used to compose a single log message from multiple lines of code. However this comes at the cost of being a bit slower to compile than the Jalog Style logging from above and, most notably, even if it is disabled at compile-time the arguments of its `operator<<` (the values you log) will still be evaluated when you run the program, potentially making it a bit slower.
+
+To use Stream Style logging with macros (which makes it easier to disable at compile time), you must include `jalog/LogStream.hpp`. The the available macros are `JALOG_STREAM(level)` and `JALOG_STREAM_SCOPE(scope, level)` for custom scopes.
+
+You can use them inline like this:
+
+```c++
+JALOG_STREAM(Info) << "Logging something: " << 343;
+```
+
+... but the more useful approach, which helps with multi-line logging, is to create a variable like so:
+
+```c++
+auto log = JALOG_STREAM(Info);
+log << "Logging something: ";
+log << 343 << jalog::endl;
+log << jalog::Level::Error << "Now an error ";
+log << "error continued" << jalog::endl;
+```
+
+Note two things from the examples above.
+
+* `jalog::Stream` allows changing of the level, by simply "logging" the new desired level. After this the level in which new things are logged will be changed.
+* `jalog::Stream` will flush the message to the scope (and subsequently to sinks) if one of three conditions is met:
+    * Its destructor is called
+    * You use `jalog::endl`
+    * You change the level. In this case the contents of the log, if any, will be fluished for the old level
+
+This allows users to create a single `jalog::Stream` instance which can be used for log period (say the entire lifetime of the application)
+
+A complete, buildable example, of Stream Style logging can be found [here](../example/e-StreamStyleLogging.cpp).
+
+### Custom types
+
+You can log custom types with `jalog::Stream` the same you can with Jalog Style logging. Both `operator<<(std::ostream&, T)` and `operator, (jalog::BasicStream&, T)` are supported, and the `operator,` approach is preferred if possible.
+
+### No macros
+
+If you have no intention to disable stream logs in compile time, or if you have an alternative way of doing do (for example putting your Stream Style logging in preprocessor `#if`-s) there is no need to use the `JALOG_STREAM` macros and instead you can simply include `jalog/Stream.hpp` and use the `jalog::Stream` like an ordinary C++ class. You must provide a scope to its constructor (more on scopes [here](creating-scopes.md))
+
+```c++
+jalog::Stream log(jalog::Default_Scope);
+log << jalog::Level::Info << "This works" << jalog::endl;
+log << jalog::Level::Error << "So does this" << jalog::endl;
+```
 
 ## `printf` Style Logging
 
 Jalog supports `printf` style logging and with it can be used to provide a function pointer to libraries (including plain C ones) which support external printf-style log functions.
+
+## Custom logging styles
