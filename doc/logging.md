@@ -103,7 +103,7 @@ You can log custom types with `jalog::Stream` the same you can with Jalog Style 
 
 ### No macros
 
-If you have no intention to disable stream logs in compile time, or if you have an alternative way of doing do (for example putting your Stream Style logging in preprocessor `#if`-s) there is no need to use the `JALOG_STREAM` macros and instead you can simply include `jalog/Stream.hpp` and use the `jalog::Stream` like an ordinary C++ class. You must provide a scope to its constructor (more on scopes [here](creating-scopes.md))
+If you have no intention to disable stream logs in compile time, or if you have an alternative way of doing so (for example putting your Stream Style logging in preprocessor `#if`-s) there is no need to use the `JALOG_STREAM` macros and instead you can simply include `jalog/Stream.hpp` and use the `jalog::Stream` like an ordinary C++ class. You must provide a scope to its constructor (more on scopes [here](creating-scopes.md))
 
 ```c++
 jalog::Stream log(jalog::Default_Scope);
@@ -113,6 +113,19 @@ log << jalog::Level::Error << "So does this" << jalog::endl;
 
 ## `printf` Style Logging
 
-Jalog supports `printf` style logging and with it can be used to provide a function pointer to libraries (including plain C ones) which support external printf-style log functions.
+Jalog supports `printf` style logging.
 
-## Custom logging styles
+If you are a fan of `printf` you can use the macros from `jalog/LogPrintf.hpp` which are easy to disable at compile-time. Note however that `printf` custom types and also logging floating point numbers won't appear in their full native precision (but must be formatted with `%f` or `%e`).
+
+The main goal of `printf`-like interface is to allow users to provide a function pointer to libraries (including plain C ones) which support external `printf`-like log functions.
+
+With `jalog/Printf.hpp` Jalog provides the following functions:
+
+* `void Printf(Scope& scope, Level lvl, const char* format, ...);`
+* `void VPrintf(Scope& scope, Level lvl, const char* format, va_list args);`
+
+It also provides the unchecked variants of those: `PrintfUnchecked` and `VPrintfUnchecked`. They have the same arguments as their "checked" counterparts but *perform no check* whether the scope is currently enabled for that level. You can use them if you have performed the check otherwise (for example the `JALOG_PRINTF` macros perform the check externally and use the unchecked variants of the functions)
+
+A complete, buildable example, of using `printf` logging to interface with an imaginary C library can be found [here](../example/e-PrintfStyleLogging.cpp).
+
+## Direct logging. Custom logging styles

@@ -7,6 +7,7 @@ endmacro()
 jalog_example(HelloWorld e-HelloWorld.cpp)
 jalog_example(BasicShowcase e-BasicShowcase.cpp)
 jalog_example(StreamStyleLogging e-StreamStyleLogging.cpp)
+jalog_example(PrintfStyleLogging e-PrintfStyleLogging.cpp)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
     find_package(Threads REQUIRED)
