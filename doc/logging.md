@@ -115,9 +115,9 @@ log << jalog::Level::Error << "So does this" << jalog::endl;
 
 Jalog supports `printf` style logging.
 
-If you are a fan of `printf` you can use the macros from `jalog/LogPrintf.hpp` which are easy to disable at compile-time. Note however that `printf` custom types and also logging floating point numbers won't appear in their full native precision (but must be formatted with `%f` or `%e`).
+If you are a fan of `printf` you can use the macros from `jalog/LogPrintf.hpp` which are easy to disable at compile-time. Note however that `printf` doesn't support custom types and also floating point numbers won't appear in their full native precision (but must be formatted with `%f` or `%e`).
 
-The main goal of `printf`-like interface is to allow users to provide a function pointer to libraries (including plain C ones) which support external `printf`-like log functions.
+The main goal of the `printf`-like interface is to allow users to provide a function pointer to libraries (including plain C ones) which support external `printf`-like log functions.
 
 With `jalog/Printf.hpp` Jalog provides the following functions:
 
@@ -129,3 +129,14 @@ It also provides the unchecked variants of those: `PrintfUnchecked` and `VPrintf
 A complete, buildable example, of using `printf` logging to interface with an imaginary C library can be found [here](../example/e-PrintfStyleLogging.cpp).
 
 ## Direct logging. Custom logging styles
+
+Logging styles are essentially different ways in which one can produce a string. If you have a custom way of producing strings, it can also be used with Jalog.
+
+`jalog::Scope` provides two methods for this:
+
+* `addEntry(level, string)` - log string if level is enabled
+* `addEntryUnchecked(level, string)` - log string with level *disregarding* whether level is enabled. You can use this if you have performed the check otherwise.
+
+Thus one can create a custom style of logging with Jalog with another string-producing library. A good candidate for this is C++20's `std::format`.
+
+A complete, buildable example, of custom logging with `std::ostringstream` can be found [here](../example/e-CustomStyleLogging.cpp).

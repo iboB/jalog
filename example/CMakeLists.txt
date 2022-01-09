@@ -8,6 +8,7 @@ jalog_example(HelloWorld e-HelloWorld.cpp)
 jalog_example(BasicShowcase e-BasicShowcase.cpp)
 jalog_example(StreamStyleLogging e-StreamStyleLogging.cpp)
 jalog_example(PrintfStyleLogging e-PrintfStyleLogging.cpp)
+jalog_example(CustomStyleLogging e-CustomStyleLogging.cpp)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
     find_package(Threads REQUIRED)
