@@ -152,8 +152,10 @@ public:
     template <typename T>
     void pushTask(T&& t)
     {
-        std::lock_guard l(m_tasksMutex);
-        pushTaskL(std::forward<T>(t));
+        {
+            std::lock_guard l(m_tasksMutex);
+            pushTaskL(std::forward<T>(t));
+        }
         wakeUpNow();
     }
 };
