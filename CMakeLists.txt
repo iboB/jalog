@@ -27,12 +27,12 @@ option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 
 #######################################
 # packages
-CPMAddPackage(gh:iboB/splat@1.1.0)
-CPMAddPackage(gh:iboB/itlib@1.4.5)
-CPMAddPackage(gh:iboB/mscharconv@1.1.1)
+CPMAddPackage(gh:iboB/splat@1.2.0)
+CPMAddPackage(gh:iboB/itlib@1.5.0)
+CPMAddPackage(gh:iboB/mscharconv@1.2.0)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
-    CPMAddPackage(gh:iboB/xec@1.3.1)
+    CPMAddPackage(gh:iboB/xec@1.4.0)
 endif()
 
 #######################################

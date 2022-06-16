@@ -1,6 +1,6 @@
 include(icm_testing)
 
-CPMAddPackage(gh:iboB/doctest-lib@2.4.6)
+CPMAddPackage(gh:iboB/doctest-lib@2.4.8a)
 
 icm_add_test(
     NAME jalog-qwrite
