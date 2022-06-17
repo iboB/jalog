@@ -65,6 +65,11 @@ public:
         }
     }
 
+    // flush sinks
+    // could be used in signal handlers or in other cases where
+    // abnormal termination is imminent and there is risk of losing log messages
+    void flush();
+
 private:
     mutable std::mutex m_mutex;
 

@@ -49,6 +49,8 @@ int main()
     JALOG(Error, "Something bad happened");
     JALOG(Critical, "Something REALLY bad happened");
 
+    exit(1);
+
     vec v = {1, 2};
     JALOG(Info, "vec: ", v);
 

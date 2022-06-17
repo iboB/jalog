@@ -9,5 +9,6 @@
 
 namespace jalog
 {
-Sink::~Sink() = default; // export the vtable from here
+// export the vtable from here
+void Sink::flush() {}
 }

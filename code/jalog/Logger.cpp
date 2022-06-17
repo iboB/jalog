@@ -9,6 +9,7 @@
 #include "DefaultLogger.hpp"
 #include "Scope.hpp"
 #include "DefaultScope.hpp"
+#include "Sink.hpp"
 
 #include <itlib/qalgorithm.hpp>
 
@@ -38,6 +39,16 @@ Level Logger::defaultLevel() const
 {
     std::lock_guard l(m_mutex);
     return m_defaultLevel;
+}
+
+void Logger::flush()
+{
+    std::lock_guard l(m_mutex);
+    if (!m_initialized) return; // nothing to flush
+    for (auto& s : m_sinks)
+    {
+        s->flush();
+    }
 }
 
 void Logger::addSink(SinkPtr sink)

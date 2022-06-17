@@ -16,10 +16,14 @@ struct Entry;
 
 class JALOG_API Sink
 {
+protected:
+    ~Sink() = default;
 public:
-    virtual ~Sink();
 
     virtual void record(const Entry& entry) = 0;
+
+    // optionally override to flush recorded entries
+    virtual void flush();
 };
 
 }
