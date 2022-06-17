@@ -36,6 +36,7 @@ public:
     void remove(const SinkPtr& sink) { remove(sink.get()); }
 
     virtual void record(const Entry& entry) override;
+    virtual void flush() override;
 
 private:
     friend class AsyncLoggingThread;

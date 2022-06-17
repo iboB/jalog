@@ -2,6 +2,7 @@
 #include <jalog/Instance.hpp>
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
+#include <jalog/Logger.hpp>
 
 #include <jalog/sinks/SimpleStdioSink.hpp>
 #include <jalog/sinks/SimpleOStreamSink.hpp>
@@ -49,6 +50,7 @@ int main()
     JALOG(Error, "Something bad happened");
     JALOG(Critical, "Something REALLY bad happened");
 
+    jl.logger().flush();
     exit(1);
 
     vec v = {1, 2};

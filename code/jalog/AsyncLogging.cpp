@@ -189,6 +189,11 @@ void AsyncLogging::record(const Entry& entry)
     m_impl->pushTask(AL::LogEntry(entry));
 }
 
+void AsyncLogging::flush()
+{
+    m_impl->update();
+}
+
 // thread
 
 class AsyncLoggingThread::Impl
