@@ -315,6 +315,8 @@ TEST_CASE("printf")
     }
 }
 
+namespace test {
+
 struct vec { float x, y; };
 
 // have this overload to confitm that the log happens through BasicStream and through std::ostream
@@ -335,6 +337,8 @@ std::ostream& operator<<(std::ostream& o, const ivec& v)
     return o << v.x << ' ' << v.y;
 }
 
+}
+
 #define tstream(lvl) JALOG_STREAM_SCOPE(helper.scope, lvl)
 
 TEST_CASE("stream")
@@ -344,13 +348,13 @@ TEST_CASE("stream")
     helper.scope.setLevel(jalog::Level::Info);
     helper.scope2.setLevel(jalog::Level::Info);
 
-    tstream(Info) << "hello " << ivec{1, 2};
+    tstream(Info) << "hello " << test::ivec{1, 2};
     tstream(Debug) << "dbg"; // skipped
 
     {
         jalog::Stream str(helper.scope2);
 
-        str << "foo " << vec{1.2f, 2.1f} << jalog::endl;
+        str << "foo " << test::vec{1.2f, 2.1f} << jalog::endl;
 
         str << jalog::Level::Debug << "dbg2"; // skipped
         str << jalog::Level::Error << "err";
@@ -415,8 +419,8 @@ TEST_CASE("stream output")
     CHECK(e.text == "abcde : bcd");
 
     // customs
-    vec v = {3.00f, 1.12f};
-    ivec iv = {5, 6};
+    test::vec v = {3.00f, 1.12f};
+    test::ivec iv = {5, 6};
     plog("j: ", v, ", std: ", iv);
     CHECK(e.text == "j: (3;1.12), std: 5 6");
 }

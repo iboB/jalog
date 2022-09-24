@@ -15,6 +15,9 @@
 
 #include <iostream>
 
+namespace math
+{
+
 struct vec { int x, y; };
 
 std::ostream& operator<<(std::ostream& o, const vec& v)
@@ -25,6 +28,8 @@ std::ostream& operator<<(std::ostream& o, const vec& v)
 jalog::BasicStream& operator,(jalog::BasicStream& s, const vec& v)
 {
     return s, '(', v.x, ';', v.y, ')';
+}
+
 }
 
 int main()
@@ -56,7 +61,7 @@ int main()
     jl.logger().flush();
     exit(1);
 
-    vec v = {1, 2};
+    math::vec v = {1, 2};
     JALOG(Info, "vec: ", v);
 
     return 0;
