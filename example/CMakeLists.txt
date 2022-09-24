@@ -1,3 +1,6 @@
+# Copyright (c) Borislav Stanimirov
+# SPDX-License-Identifier: MIT
+#
 macro(jalog_example example)
     set(ename jalog-example-${example})
     add_executable(${ename} ${ARGN})

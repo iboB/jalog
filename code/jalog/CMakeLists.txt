@@ -1,3 +1,6 @@
+# Copyright (c) Borislav Stanimirov
+# SPDX-License-Identifier: MIT
+#
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
     set(asyncSources

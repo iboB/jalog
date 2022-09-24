@@ -1,3 +1,6 @@
+// Copyright (c) Borislav Stanimirov
+// SPDX-License-Identifier: MIT
+//
 #include <jalog/DefaultLogger.hpp>
 #include <jalog/Instance.hpp>
 #include <jalog/Log.hpp>
