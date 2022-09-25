@@ -63,7 +63,7 @@ In most cases this will be significantly faster than using `std::ostream` (and n
 
 ## Stream Style Logging
 
-Jalog also supports stream-style logging with `operator<<`. Note that this is not done by inheriting from `std::ostream`. Jalog provides it's own class `jalog::Stream` which has an overload for `operator<<`.
+Jalog also supports stream-style logging with `operator<<`. Note that this is not done by inheriting from `std::ostream`. Jalog provides its own class `jalog::Stream` which has an overload for `operator<<`.
 
 The benefit of `jalog::Stream` is that it can be used to compose a single log message from multiple lines of code. However this comes at the cost of being a bit slower to compile than the Jalog Style logging from above and, most notably, even if it is disabled at compile-time the arguments of its `operator<<` (the values you log) will still be evaluated when you run the program, potentially making it a bit slower.
 
