@@ -8,6 +8,6 @@ icm_add_lib(jalog-sinklib JALOG_SINKLIB
     WindowsColorSink.hpp
     WindowsColorSink.cpp
 )
-
+add_library(jalog::sinklib ALIAS jalog-sinklib)
 target_include_directories(jalog-sinklib INTERFACE ../..)
 target_link_libraries(jalog-sinklib PUBLIC jalog)

@@ -10,7 +10,7 @@ include(./get_cpm.cmake)
 
 #######################################
 # cmake lib
-CPMAddPackage(gh:iboB/icm@1.3.3)
+CPMAddPackage(gh:iboB/icm@1.3.4)
 
 set(CMAKE_MODULE_PATH
     ${CMAKE_MODULE_PATH}
@@ -30,12 +30,12 @@ option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 
 #######################################
 # packages
-CPMAddPackage(gh:iboB/splat@1.2.0)
-CPMAddPackage(gh:iboB/itlib@1.6.2)
-CPMAddPackage(gh:iboB/mscharconv@1.2.0)
+CPMAddPackage(gh:iboB/splat@1.2.1)
+CPMAddPackage(gh:iboB/itlib@1.6.3)
+CPMAddPackage(gh:iboB/mscharconv@1.2.1)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
-    CPMAddPackage(gh:iboB/xec@1.4.0)
+    CPMAddPackage(gh:iboB/xec@1.4.1)
 endif()
 
 #######################################

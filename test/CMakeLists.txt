@@ -3,21 +3,21 @@
 #
 include(icm_testing)
 
-CPMAddPackage(gh:iboB/doctest-lib@2.4.8a)
+CPMAddPackage(gh:iboB/doctest-util@0.0.5)
 
 icm_add_test(
     NAME jalog-qwrite
     TARGET test-jalog-qwrite
     LIBRARIES
-        doctest-main
-        itlib
-        splat
-        mscharconv
+        doctest::main
+        itlib::itlib
+        splat::splat
+        msstl::charconv
     SOURCES t-qwrite.cpp
 )
 
 macro(jalog_test test)
-    icm_add_doctest_lib_test(${test} jalog ${ARGN})
+    add_doctest_lib_test(${test} jalog ${ARGN})
 endmacro()
 
 jalog_test(core t-core.cpp)

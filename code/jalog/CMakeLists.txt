@@ -41,14 +41,15 @@ icm_add_lib(jalog JALOG
 
     ${asyncSources}
 )
+add_library(jalog::jalog ALIAS jalog)
 
 target_include_directories(jalog INTERFACE ..)
 target_link_libraries(jalog
     PUBLIC
-        splat
-        itlib
+        splat::splat
+        itlib::itlib
     PRIVATE
-        mscharconv
+        msstl::charconv
 )
 
 if(JALOG_NO_BUILTIN_ASYNC)
