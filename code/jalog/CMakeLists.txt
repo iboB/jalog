@@ -26,6 +26,7 @@ target_sources(jalog PRIVATE
 
     Printf.hpp
     Printf.cpp
+    PrintfWrap.hpp
 
     Log.hpp
     LogPrintf.hpp

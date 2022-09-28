@@ -7,12 +7,15 @@
 
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
+#include <jalog/PrintfWrap.hpp>
 #include <jalog/DefaultLogger.hpp>
 #include <jalog/Instance.hpp>
 
 TEST_SUITE_BEGIN("jalog");
 
 jalog::Scope gscope("g", 10, 20);
+
+JALOG_DEFINE_PRINTF_FUNC(log_gscope, gscope)
 
 TEST_CASE("default logger/scope")
 {
@@ -35,7 +38,9 @@ TEST_CASE("default logger/scope")
     JALOG_PRINTF_SCOPE(gscope, Debug, "dbg%d", 3);
     JALOG_SCOPE(gscope, Error, "err", 3);
 
-    REQUIRE(es.size() == 5);
+    log_gscope<jalog::Level::Warning>("wrn%d", 11);
+
+    REQUIRE(es.size() == 6);
 
     {
         auto& e = es[0];
@@ -76,5 +81,13 @@ TEST_CASE("default logger/scope")
         CHECK(e.scope.userData == 20);
         CHECK(e.level == jalog::Level::Error);
         CHECK(e.text == "err3");
+    }
+    {
+        auto& e = es[5];
+        CHECK(e.scope.label() == "g");
+        CHECK(e.scope.id() == 10);
+        CHECK(e.scope.userData == 20);
+        CHECK(e.level == jalog::Level::Warning);
+        CHECK(e.text == "wrn11");
     }
 }
