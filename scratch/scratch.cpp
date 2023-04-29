@@ -10,6 +10,7 @@
 #include <jalog/sinks/SimpleStdioSink.hpp>
 #include <jalog/sinks/SimpleOStreamSink.hpp>
 #include <jalog/sinks/ColorSink.hpp>
+#include <jalog/sinks/AnsiColorSink.hpp>
 
 #include <jalog/Printf.hpp>
 
@@ -37,6 +38,7 @@ int main()
     jalog::Instance jl;
     jl.setup().async()
         .add<jalog::sinks::ColorSink>()
+        //.add<jalog::sinks::AnsiColorSink>()
         .add<jalog::sinks::SimpleStdioSink>()
         .add<jalog::sinks::SimpleOStreamSink>(std::cout, std::cerr);
 
@@ -59,7 +61,7 @@ int main()
     JALOG(Critical, "Something REALLY bad happened");
 
     jl.logger().flush();
-    exit(1);
+    //exit(1);
 
     math::vec v = {1, 2};
     JALOG(Info, "vec: ", v);

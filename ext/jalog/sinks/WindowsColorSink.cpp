@@ -10,7 +10,9 @@
 
 #include <itlib/time_t.hpp>
 
+#if !defined(NOMINMAX)
 #define NOMINMAX
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <wincon.h>
@@ -45,7 +47,7 @@ void printWithColor(HANDLE out, uint16_t color, std::string_view text)
         originalAttribs = info.wAttributes;
     }
 
-    auto newAttributes = color | (originalAttribs & 0xfff00);
+    WORD newAttributes = color | (originalAttribs & 0xfff00);
     SetConsoleTextAttribute(out, newAttributes);
 
     WriteConsoleA(out, text.data(), DWORD(text.size()), nullptr, nullptr);
@@ -104,7 +106,7 @@ void WindowsColorSink::record(const Entry& entry)
             FOREGROUND_RED | FOREGROUND_INTENSITY
         };
         static_assert(std::size(colors) == static_cast<uint32_t>(Level::Off));
-        auto color = (entry.level < Level::Off) ? colors[static_cast<uint32_t>(entry.level)] : (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
+        uint16_t color = (entry.level < Level::Off) ? colors[static_cast<uint32_t>(entry.level)] : (FOREGROUND_RED | FOREGROUND_GREEN | FOREGROUND_BLUE);
 
         static const std::string_view lstr[] = {
             "[debug] ",
