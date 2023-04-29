@@ -109,9 +109,19 @@ public:
 
     virtual void update() override
     {
-        m_tasksMutex.lock();
+        {
+            std::lock_guard l(m_tasksMutex);
+            swapBuffers();
+        }
+        executeTasks();
+    }
+
+    void flush()
+    {
+        // execute tasks while the mutex is locked
+        // thus it wont interfere with update thread
+        std::lock_guard l(m_tasksMutex);
         swapBuffers();
-        m_tasksMutex.unlock();
         executeTasks();
     }
 
@@ -187,7 +197,7 @@ void AsyncLogging::record(const Entry& entry)
 
 void AsyncLogging::flush()
 {
-    m_impl->update();
+    m_impl->flush();
 }
 
 // thread
