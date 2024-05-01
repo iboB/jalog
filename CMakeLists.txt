@@ -3,7 +3,9 @@
 #
 cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
 
-project(jalog)
+project(jalog
+    LANGUAGES CXX
+)
 
 # cpm
 include(./get_cpm.cmake)
