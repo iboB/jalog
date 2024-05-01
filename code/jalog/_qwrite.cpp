@@ -3,7 +3,12 @@
 //
 #include "_qwrite.hpp"
 
+#if JALOG_USE_MSCHARCONV
 #include <msstl/charconv.hpp>
+#else
+#include <charconv>
+#define msstl std
+#endif
 
 #include <cstdio>
 

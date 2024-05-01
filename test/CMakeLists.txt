@@ -12,7 +12,7 @@ icm_add_test(
         doctest::main
         itlib::itlib
         splat::splat
-        msstl::charconv
+        jalog::charconv
     SOURCES t-qwrite.cpp
 )
 

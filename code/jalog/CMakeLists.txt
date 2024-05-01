@@ -41,7 +41,7 @@ target_link_libraries(jalog
         splat::splat
         itlib::itlib
     PRIVATE
-        msstl::charconv
+        jalog::charconv
 )
 
 if(JALOG_NO_BUILTIN_ASYNC)

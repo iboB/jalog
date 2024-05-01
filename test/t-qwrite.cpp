@@ -7,7 +7,13 @@
 #include "../code/jalog/_qwrite.hpp"
 #include "../code/jalog/_qwrite.cpp"
 
+#if JALOG_USE_MSCHARCONV
 #include <msstl/charconv.hpp>
+#else
+#include <charconv>
+#define msstl std
+#endif
+
 #include <string>
 #include <sstream>
 #include <limits>

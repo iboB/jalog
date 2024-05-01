@@ -32,10 +32,22 @@ option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 # packages
 CPMAddPackage(gh:iboB/splat@1.3.2)
 CPMAddPackage(gh:iboB/itlib@1.10.3)
-CPMAddPackage(gh:iboB/mscharconv@1.2.3)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
     CPMAddPackage(gh:iboB/xec@1.5.0)
+endif()
+
+# charconv
+add_library(jalog-charconv INTERFACE)
+add_library(jalog::charconv ALIAS jalog-charconv)
+include(icm_check_charconv_fp_to_chars)
+if(haveCharconvFpToChars)
+    message(STATUS "jalog: using std::charconv with fp support")
+else()
+    CPMAddPackage(gh:iboB/mscharconv@1.2.3)
+    message(STATUS "jalog: using msstl/charconv")
+    target_link_libraries(jalog-charconv INTERFACE msstl::charconv)
+    target_compile_definitions(jalog-charconv INTERFACE JALOG_USE_MSCHARCONV=1)
 endif()
 
 #######################################
