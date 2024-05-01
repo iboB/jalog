@@ -25,9 +25,15 @@
 // ...
 // CLibInit(&cfg);
 
+#if defined(__GNUC__)
+#   define I_JALOG_PRINTF_WRAP_FMT __attribute__((format(printf, 1, 2)))
+#else
+#   define I_JALOG_PRINTF_WRAP_FMT
+#endif
+
 #define JALOG_DEFINE_PRINTF_FUNC(name, scope) \
     template <::jalog::Level lvl> \
-    I_JALOG_PRINTF_FMT void name(_Printf_format_string_ const char* format, ...) { \
+    I_JALOG_PRINTF_WRAP_FMT void name(_Printf_format_string_ const char* format, ...) { \
         va_list args; \
         va_start(args, format); \
         ::jalog::VPrintf(scope, lvl, format, args); \
