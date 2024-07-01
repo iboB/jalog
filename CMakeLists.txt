@@ -36,7 +36,7 @@ CPMAddPackage(gh:iboB/splat@1.3.2)
 CPMAddPackage(gh:iboB/itlib@1.10.3)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
-    CPMAddPackage(gh:iboB/xec@1.5.0)
+    CPMAddPackage(gh:iboB/xec@1.5.1)
 endif()
 
 # charconv
