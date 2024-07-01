@@ -22,7 +22,7 @@ public:
 
     class JALOG_API SetupDSL {
     public:
-        SetupDSL(Instance& i) : m_instance(i) {}
+        explicit SetupDSL(Instance& i) : m_instance(i) {}
         ~SetupDSL();
         SetupDSL& defaultLevel(Level lvl);
         SetupDSL& add(SinkPtr sink);

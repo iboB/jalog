@@ -16,9 +16,10 @@ namespace jalog
 Scope::Scope(Logger& logger, std::string_view lbl, uintptr_t id, intptr_t userData)
     : m_logger(logger)
 {
-    auto len = std::min(lbl.length(), m_desc.m_labelBytes.capacity());
-    m_desc.m_labelBytes.resize(len);
-    std::memcpy(m_desc.m_labelBytes.data(), lbl.data(), len);
+    auto len = std::min(lbl.length(), sizeof(m_desc.m_labelBytes) - 1);
+    std::memcpy(m_desc.m_labelBytes, lbl.data(), len);
+    m_desc.m_labelBytes[len] = 0;
+    m_desc.m_labelLength = uint32_t(len);
 
     m_desc.m_id = id;
     m_desc.userData = userData;

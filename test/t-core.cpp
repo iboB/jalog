@@ -11,6 +11,31 @@
 
 TEST_SUITE_BEGIN("jalog");
 
+TEST_CASE("scopes")
+{
+    jalog::Scope s1("s1", 1, 2);
+
+    auto& s1d = s1.desc();
+    CHECK(s1d.id() == 1);
+    CHECK(s1d.label() == "s1");
+    CHECK(s1d.labelCStr() == s1d.label().data());
+    CHECK(strlen(s1d.labelCStr()) == s1d.label().length());
+    CHECK(s1d.userData == 2);
+
+    CHECK(s1.level() == jalog::Level::Off);
+    s1.setLevel(jalog::Level::Error);
+    CHECK(s1.level() == jalog::Level::Error);
+    CHECK_FALSE(s1.enabled(jalog::Level::Debug));
+    CHECK_FALSE(s1.enabled(jalog::Level::Info));
+    CHECK_FALSE(s1.enabled(jalog::Level::Warning));
+    CHECK(s1.enabled(jalog::Level::Error));
+    CHECK(s1.enabled(jalog::Level::Critical));
+
+    jalog::Scope longname("0123456789ABCDEFG");
+    CHECK(longname.desc().label() == "0123456789ABCDE");
+}
+
+
 struct TestHelper
 {
     TestHelper(int numSinks = 2)
@@ -97,7 +122,7 @@ TEST_CASE("no setup")
     CHECK(nope == 0);
 }
 
-TEST_CASE("scopes")
+TEST_CASE("log scopes")
 {
     const uint64_t start = nanotime();
 
