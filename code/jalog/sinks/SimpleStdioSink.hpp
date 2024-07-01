@@ -12,7 +12,7 @@
 namespace jalog::sinks
 {
 
-class SimpleStdioSink : public Sink
+class SimpleStdioSink final : public Sink
 {
 public:
     SimpleStdioSink(FILE* out = stdout, FILE* err = nullptr)
@@ -33,7 +33,7 @@ public:
         }
     }
 
-    virtual void record(const Entry& entry) final override {
+    virtual void record(const Entry& entry) override {
         FILE* out = entry.level < Level::Error ? m_out : m_err;
 
         // time

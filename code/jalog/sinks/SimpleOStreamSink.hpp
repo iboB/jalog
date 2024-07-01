@@ -13,7 +13,7 @@
 namespace jalog::sinks
 {
 
-class SimpleOStreamSink : public Sink
+class SimpleOStreamSink final : public Sink
 {
 public:
     SimpleOStreamSink(std::ostream& out, std::ostream& err)
@@ -34,7 +34,7 @@ public:
         }
     }
 
-    virtual void record(const Entry& entry) final override {
+    virtual void record(const Entry& entry) override {
         auto& out = [&, this]() -> std::ostream& {
             if (entry.level < Level::Error) return m_out;
             return m_err;

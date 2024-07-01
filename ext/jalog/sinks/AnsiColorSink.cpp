@@ -50,7 +50,7 @@ void AnsiColorSink::record(const Entry& entry)
         };
         static_assert(std::size(lstr) == static_cast<uint32_t>(Level::Off));
         const char* str = (entry.level < Level::Off) ? lstr[static_cast<uint32_t>(entry.level)] : "[  ?  ]";
-        fprintf(out, str);
+        fputs(str, out);
     }
 
     // text
