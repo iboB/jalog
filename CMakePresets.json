@@ -24,18 +24,29 @@
       "cacheVariables": { "CMAKE_BUILD_TYPE": "RelWithDebInfo" }
     },
     {
-      "name": "android",
+      "name": "static",
       "hidden": true,
-      "cacheVariables": {
-        "CMAKE_SYSTEM_NAME": "Android",
-        "CMAKE_SYSTEM_VERSION": "24",
-        "CMAKE_ANDROID_ARCH_ABI": "arm64-v8a",
-        "CMAKE_ANDROID_NDK": {
-            "value": "$env{ANDROID_NDK_ROOT}",
-            "type": "PATH"
-          },
-        "CMAKE_ANDROID_STL_TYPE": "c++_static"
-      }
+      "cacheVariables": { "BUILD_SHARED_LIBS": "OFF" }
+    },
+    {
+      "name": "asan",
+      "hidden": true,
+      "cacheVariables": { "SAN_ADDR": true }
+    },
+    {
+      "name": "ubsan",
+      "hidden": true,
+      "cacheVariables": { "SAN_UB": true }
+    },
+    {
+      "name": "lsan",
+      "hidden": true,
+      "cacheVariables": { "SAN_LEAK": true }
+    },
+    {
+      "name": "tsan",
+      "hidden": true,
+      "cacheVariables": { "SAN_THREAD": true }
     },
 
     {
@@ -48,12 +59,57 @@
     },
 
     {
+      "name": "debug-static",
+      "inherits": ["base-debug", "static"]
+    },
+    {
+      "name": "release-static",
+      "inherits": ["base-release", "static"]
+    },
+
+    {
+      "name": "debug-asan",
+      "inherits": ["base-debug", "asan"]
+    },
+    {
+      "name": "release-asan",
+      "inherits": ["base-release", "asan"]
+    },
+    {
+      "name": "debug-tsan",
+      "inherits": ["base-debug", "tsan"]
+    },
+    {
+      "name": "release-tsan",
+      "inherits": ["base-release", "tsan"]
+    },
+    {
+      "name": "debug-aublsan",
+      "description": "combining addr, ub and leak sanitizers is widely supported on many platforms",
+      "inherits": ["base-debug", "asan", "ubsan", "lsan"]
+    },
+
+    {
+      "name": "android",
+      "hidden": true,
+      "cacheVariables": {
+        "CMAKE_SYSTEM_NAME": "Android",
+        "CMAKE_SYSTEM_VERSION": "24",
+        "CMAKE_ANDROID_ARCH_ABI": "arm64-v8a",
+        "CMAKE_ANDROID_NDK": {
+          "value": "$env{ANDROID_NDK_ROOT}",
+          "type": "PATH"
+        },
+        "CMAKE_ANDROID_STL_TYPE": "c++_static"
+      }
+    },
+    {
       "name": "debug-android",
-      "inherits": [ "debug", "android" ]
+      "inherits": ["debug", "android"]
     },
     {
       "name": "release-android",
-      "inherits": [ "release", "android" ]
+      "inherits": ["release", "android"]
     }
   ]
 }
