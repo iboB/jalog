@@ -3,8 +3,6 @@
 //
 #include "WindowsColorSink.hpp"
 
-#if defined(_WIN32)
-
 #include <jalog/Entry.hpp>
 #include <jalog/sinks/SimpleStdioSink.hpp>
 
@@ -126,5 +124,3 @@ void WindowsColorSink::record(const Entry& entry)
 }
 
 }
-
-#endif
