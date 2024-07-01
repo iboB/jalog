@@ -14,6 +14,12 @@ if(WIN32)
         WindowsColorSink.hpp
         WindowsColorSink.cpp
     )
+elseif(ANDROID)
+    target_sources(jalog-sinklib PRIVATE
+        AndroidSink.hpp
+        AndroidSink.cpp
+    )
+    target_link_libraries(jalog-sinklib PRIVATE log)
 endif()
 
 target_include_directories(jalog-sinklib INTERFACE ../..)

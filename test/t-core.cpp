@@ -8,6 +8,7 @@
 #include <jalog/LogStream.hpp>
 
 #include <jalog/Logger.hpp>
+#include <jalog/DefaultScope.hpp>
 
 TEST_SUITE_BEGIN("jalog");
 
@@ -35,6 +36,15 @@ TEST_CASE("scopes")
     CHECK(longname.desc().label() == "0123456789ABCDE");
 }
 
+TEST_CASE("default scope")
+{
+    auto& s = jalog::Default_Scope;
+    auto& sd = s.desc();
+    CHECK(sd.id() == 0);
+    CHECK(sd.label().empty());
+    CHECK(*sd.labelCStr() == 0);
+    CHECK(sd.userData == -1);
+}
 
 struct TestHelper
 {
