@@ -14,6 +14,8 @@ namespace jalog
 void VPrintfUnchecked(Scope& scope, Level lvl, const char* format, va_list args)
 {
     va_list acopy;
+    // we need to copy the va_list, because if our optimistic fit below doesn't fit, we would need to call
+    // vsnprintf again (and the first call would've consumed the original va_list)
     va_copy(acopy, args);
 
     // optimistically try to fit in a small buffer

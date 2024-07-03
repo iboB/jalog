@@ -31,7 +31,7 @@ public:
     }
 
     // pack raw pointers along with the sinks to skip
-    // the control block hop of shared_ptr::->
+    // a potential control block hop of shared_ptr::->
     struct SinkData
     {
         SinkData(SinkPtr p) : ptr(std::move(p)), sink(ptr.get()) {}
