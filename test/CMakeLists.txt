@@ -3,7 +3,7 @@
 #
 include(icm_testing)
 
-CPMAddPackage(gh:iboB/doctest-util@0.1.1)
+CPMAddPackage(gh:iboB/doctest-util@0.1.2)
 
 icm_add_test(
     NAME jalog-qwrite
