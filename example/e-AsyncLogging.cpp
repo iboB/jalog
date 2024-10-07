@@ -3,7 +3,7 @@
 //
 #include <jalog/Instance.hpp>
 #include <jalog/Log.hpp>
-#include <jalog/sinks/ColorSink.hpp>
+#include <jalog/sinks/DefaultSink.hpp>
 
 #include <thread>
 
@@ -11,7 +11,7 @@ int main() {
     jalog::Instance jl;
     jl.setup()
         .async()
-            .add<jalog::sinks::ColorSink>();
+            .add<jalog::sinks::DefaultSink>();
 
     std::thread threadA([]() {
         for (int i=0; i<10; ++i) {

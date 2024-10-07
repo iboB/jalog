@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: MIT
 //
 #include <jalog/Instance.hpp>
-#include <jalog/sinks/ColorSink.hpp>
+#include <jalog/sinks/DefaultSink.hpp>
 #include <jalog/LogStream.hpp>
 
 int main()
 {
     jalog::Instance jl;
-    jl.setup().add<jalog::sinks::ColorSink>();
+    jl.setup().add<jalog::sinks::DefaultSink>();
 
     auto log = JALOG_STREAM(Info);
 

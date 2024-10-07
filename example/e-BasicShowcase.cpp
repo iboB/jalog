@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #include <jalog/Instance.hpp>
-#include <jalog/sinks/ColorSink.hpp>
+#include <jalog/sinks/DefaultSink.hpp>
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
 
@@ -23,7 +23,7 @@ std::ostream& operator<<(std::ostream& o, const Person& p)
 int main()
 {
     jalog::Instance jl;
-    jl.setup().add<jalog::sinks::ColorSink>();
+    jl.setup().add<jalog::sinks::DefaultSink>();
 
     JALOG(Debug, "Log integers: ", 34, ", or in a custom base: ", jalog::base<16>(255));
     JALOG(Info, "Log floating point numbers with no precision loss: ", 12.4356631);

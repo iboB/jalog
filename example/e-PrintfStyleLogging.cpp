@@ -2,7 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #include <jalog/Instance.hpp>
-#include <jalog/sinks/ColorSink.hpp>
+#include <jalog/sinks/DefaultSink.hpp>
 #include <jalog/Scope.hpp>
 #include <jalog/Log.hpp>
 #include <jalog/Printf.hpp>
@@ -46,7 +46,7 @@ void JalogForCLib_Error(const char* fmt, ...)
 int main()
 {
     jalog::Instance jl;
-    jl.setup().add<jalog::sinks::ColorSink>();
+    jl.setup().add<jalog::sinks::DefaultSink>();
 
     clib_log_info = JalogForCLib_Info;
     clib_log_error = JalogForCLib_Error;
