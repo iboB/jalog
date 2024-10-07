@@ -11,6 +11,7 @@
 #include <jalog/sinks/SimpleOStreamSink.hpp>
 #include <jalog/sinks/ColorSink.hpp>
 #include <jalog/sinks/AnsiColorSink.hpp>
+#include <jalog/sinks/NSLogSink.hpp>
 
 #include <jalog/Printf.hpp>
 
@@ -40,7 +41,8 @@ int main()
         .add<jalog::sinks::ColorSink>()
         //.add<jalog::sinks::AnsiColorSink>()
         .add<jalog::sinks::SimpleStdioSink>()
-        .add<jalog::sinks::SimpleOStreamSink>(std::cout, std::cerr);
+        .add<jalog::sinks::SimpleOStreamSink>(std::cout, std::cerr)
+        .add<jalog::sinks::NSLogSink>();
 
     jalog::Scope Algos("Algorithms");
 
@@ -65,6 +67,8 @@ int main()
 
     math::vec v = {1, 2};
     JALOG(Info, "vec: ", v);
+
+    delete[] p;
 
     return 0;
 }

@@ -20,6 +20,13 @@ elseif(ANDROID)
         AndroidSink.cpp
     )
     target_link_libraries(jalog-sinklib PRIVATE log)
+elseif(APPLE)
+    target_sources(jalog-sinklib PRIVATE
+        NSLogSink.hpp
+        NSLogSink.mm
+    )
+    find_library(COCOA Cocoa)
+    target_link_libraries(jalog-sinklib PRIVATE ${COCOA})
 endif()
 
 target_include_directories(jalog-sinklib INTERFACE ../..)
