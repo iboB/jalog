@@ -15,6 +15,7 @@
 #include <variant>
 #include <mutex>
 #include <cassert>
+#include <future>
 
 namespace jalog
 {
@@ -80,7 +81,15 @@ public:
         }
     };
 
-    using Task = std::variant<LogEntry, AddSink, RemoveSink>;
+    struct Synchronize {
+        std::promise<void> promise;
+        void operator()(AsyncLoggingImpl&)
+        {
+            promise.set_value();
+        }
+    };
+
+    using Task = std::variant<LogEntry, AddSink, RemoveSink, Synchronize>;
 
     std::mutex m_tasksMutex;
     std::vector<Task> m_taskQueue;
@@ -113,15 +122,6 @@ public:
             std::lock_guard l(m_tasksMutex);
             swapBuffers();
         }
-        executeTasks();
-    }
-
-    void flush()
-    {
-        // execute tasks while the mutex is locked
-        // thus it wont interfere with update thread
-        std::lock_guard l(m_tasksMutex);
-        swapBuffers();
         executeTasks();
     }
 
@@ -197,7 +197,10 @@ void AsyncLogging::record(const Entry& entry)
 
 void AsyncLogging::flush()
 {
-    m_impl->flush();
+    AL::Synchronize sync;
+    auto f = sync.promise.get_future();
+    m_impl->pushTask(std::move(sync));
+    f.wait();
 }
 
 // thread
