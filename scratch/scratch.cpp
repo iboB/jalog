@@ -39,10 +39,12 @@ int main()
     jalog::Instance jl;
     jl.setup().async()
         .add<jalog::sinks::ColorSink>()
-        //.add<jalog::sinks::AnsiColorSink>()
         .add<jalog::sinks::SimpleStdioSink>()
         .add<jalog::sinks::SimpleOStreamSink>(std::cout, std::cerr)
-        .add<jalog::sinks::NSLogSink>();
+#if defined(__APPLE__)
+        .add<jalog::sinks::NSLogSink>()
+#endif
+    ;
 
     jalog::Scope Algos("Algorithms");
 
