@@ -26,7 +26,11 @@ elseif(APPLE)
         NSLogSink.mm
     )
     find_library(COCOA Cocoa)
-    target_link_libraries(jalog-sinklib PRIVATE ${COCOA})
+    if(COCOA)
+        # On iOS Cocoa does not exist as a separate framework
+        # so just ignore it
+        target_link_libraries(jalog-sinklib PRIVATE ${COCOA})
+    endif()
 endif()
 
 target_include_directories(jalog-sinklib INTERFACE ../..)
