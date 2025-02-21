@@ -7,8 +7,8 @@
 #include "Level.hpp"
 #include "ScopeDesc.hpp"
 
+#include <itlib/span.hpp>
 #include <atomic>
-#include <vector>
 #include <string_view>
 
 namespace jalog
@@ -57,7 +57,7 @@ protected:
 
     ScopeDesc m_desc;
 
-    std::vector<Sink*> m_sinks;
+    itlib::span<Sink*> m_sinks;
 };
 
 }

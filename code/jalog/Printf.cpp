@@ -6,6 +6,7 @@
 #include "Scope.hpp"
 
 #include <cstdio>
+#include <vector>
 #include <cstdarg>
 
 namespace jalog

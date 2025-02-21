@@ -74,6 +74,7 @@ private:
     void addSink(SinkPtr sink);
     void initialize();
     std::vector<SinkPtr> m_sinks;
+    std::vector<Sink*> m_scopeSinks; // for scope initialization
     bool m_initialized = false;
 
     // scope registry

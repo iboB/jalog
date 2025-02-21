@@ -63,6 +63,11 @@ void Logger::initialize()
 
     m_initialized = true;
 
+    m_scopeSinks.reserve(m_sinks.size());
+    for (auto& sink : m_sinks) {
+        m_scopeSinks.push_back(sink.get());
+    }
+
     for (auto scope : m_scopes)
     {
         if (!scope) continue;
@@ -72,12 +77,8 @@ void Logger::initialize()
 
 void Logger::initScope(Scope& scope)
 {
-    scope.m_sinks.clear();
-    scope.m_sinks.reserve(m_sinks.size());
-    for (auto& s : m_sinks)
-    {
-        scope.m_sinks.emplace_back(s.get());
-    }
+    assert(scope.m_sinks.empty());
+    scope.m_sinks = m_scopeSinks;
     scope.setLevel(m_defaultLevel);
 }
 
