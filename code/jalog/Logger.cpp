@@ -72,13 +72,13 @@ void Logger::initialize()
 
 void Logger::initScope(Scope& scope)
 {
-    scope.setLevel(m_defaultLevel);
     scope.m_sinks.clear();
     scope.m_sinks.reserve(m_sinks.size());
     for (auto& s : m_sinks)
     {
         scope.m_sinks.emplace_back(s.get());
     }
+    scope.setLevel(m_defaultLevel);
 }
 
 void Logger::registerScope(Scope& scope)

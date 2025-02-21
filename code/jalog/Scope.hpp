@@ -35,8 +35,8 @@ public:
 
     const ScopeDesc& desc() const { return m_desc; }
 
-    void setLevel(Level lvl) { m_level.store(lvl, std::memory_order_relaxed); }
-    Level level() const { return m_level.load(std::memory_order_relaxed); }
+    void setLevel(Level lvl) { m_level.store(lvl, std::memory_order_release); }
+    Level level() const { return m_level.load(std::memory_order_acquire); }
 
     bool enabled(Level lvl) const { return lvl >= level(); }
 
