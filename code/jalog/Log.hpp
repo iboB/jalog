@@ -12,7 +12,7 @@
 #include "BasicStream.hpp"
 
 #define JALOG_SCOPE(scope, lvl, ...) \
-    if (scope.enabled(::jalog::Level::lvl)) \
+    if ((scope).enabled(::jalog::Level::lvl)) \
         ::jalog::BasicStream(scope, ::jalog::Level::lvl), __VA_ARGS__, ::jalog::endl
 
 #define JALOG(lvl, ...) JALOG_SCOPE(::jalog::Default_Scope, lvl, __VA_ARGS__)
