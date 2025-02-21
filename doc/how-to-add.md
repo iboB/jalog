@@ -20,12 +20,11 @@ Jalog uses [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) to handle its own
 
 The dependencies of the project are
 
-* [iboB/icm@1.5.1](https://github.com/iboB/icm)
-* [iboB/splat@1.3.2](https://github.com/iboB/splat)
-* [iboB/itlib@1.10.3](https://github.com/iboB/itlib)
-* [iboB/xec@1.5.0](https://github.com/iboB/xec)
+* [iboB/icm@1.5.4](https://github.com/iboB/icm)
+* [iboB/splat@1.3.3](https://github.com/iboB/splat)
+* [iboB/itlib@1.11.5](https://github.com/iboB/itlib)
 * [iboB/mscharconv@1.2.3](https://github.com/iboB/mscharconv)
-* (for building the tests only) [iboB/doctest-util@0.1.1](https://github.com/iboB/doctest-util)
+* (for building the tests only) [iboB/doctest-util@0.1.3](https://github.com/iboB/doctest-util)
 
 ### Other ways
 

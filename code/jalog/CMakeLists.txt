@@ -52,5 +52,4 @@ else()
         AsyncLogging.cpp
         AsyncLoggingThread.hpp
     )
-    target_link_libraries(jalog PRIVATE xec)
 endif()

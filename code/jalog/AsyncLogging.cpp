@@ -6,9 +6,6 @@
 
 #include "Entry.hpp"
 
-#include <xec/ExecutorBase.hpp>
-#include <xec/ThreadExecution.hpp>
-
 #include <itlib/pod_vector.hpp>
 #include <itlib/qalgorithm.hpp>
 #include <vector>
@@ -16,13 +13,16 @@
 #include <mutex>
 #include <cassert>
 #include <future>
+#include <atomic>
+#include <thread>
+#include <condition_variable>
 
 namespace jalog
 {
 
 namespace impl
 {
-class AsyncLoggingImpl final : public xec::ExecutorBase
+class AsyncLoggingImpl
 {
 public:
     AsyncLoggingImpl(size_t initialTextBufferSize)
@@ -92,6 +92,7 @@ public:
     using Task = std::variant<LogEntry, AddSink, RemoveSink, Synchronize>;
 
     std::mutex m_tasksMutex;
+    std::condition_variable m_tasksCv;
     std::vector<Task> m_taskQueue;
     itlib::pod_vector<char> m_textBuffer;
 
@@ -116,16 +117,16 @@ public:
         m_loggingTextBuffer.clear();
     }
 
-    virtual void update() override
+    void update()
     {
-        {
-            std::lock_guard l(m_tasksMutex);
-            swapBuffers();
-        }
+        std::unique_lock lock(m_tasksMutex);
+        m_tasksCv.wait(lock, [this] { return !m_taskQueue.empty(); });
+        swapBuffers();
+        lock.unlock();
         executeTasks();
     }
 
-    virtual void finalize() override
+    void finalize()
     {
         update();
     }
@@ -162,10 +163,17 @@ public:
             std::lock_guard l(m_tasksMutex);
             pushTaskL(std::forward<T>(t));
         }
-        wakeUpNow();
+        m_tasksCv.notify_one();
+    }
+
+    void flush() {
+        Synchronize sync;
+        auto f = sync.promise.get_future();
+        pushTask(std::move(sync));
+        f.wait();
     }
 };
-}
+} // namespace impl
 
 using AL = impl::AsyncLoggingImpl;
 
@@ -197,10 +205,7 @@ void AsyncLogging::record(const Entry& entry)
 
 void AsyncLogging::flush()
 {
-    AL::Synchronize sync;
-    auto f = sync.promise.get_future();
-    m_impl->pushTask(std::move(sync));
-    f.wait();
+    m_impl->flush();
 }
 
 // thread
@@ -208,15 +213,31 @@ void AsyncLogging::flush()
 class AsyncLoggingThread::Impl
 {
 public:
+    AL& m_al;
+
     Impl(AL& al, std::string_view threadName)
-        : m_execution(al)
+        : m_al(al)
     {
-        std::optional<std::string_view> name;
-        if (!threadName.empty()) name = threadName;
-        m_execution.launchThread(name);
+        m_running.test_and_set();
+
+        m_thread = std::thread([this, &al, name = std::string(threadName)] {
+            // TODO: set thread name
+
+            while (m_running.test_and_set(std::memory_order_acquire)) {
+                al.update();
+            }
+            al.finalize();
+        });
     }
 
-    xec::ThreadExecution m_execution;
+    ~Impl() {
+        m_running.clear(std::memory_order_release);
+        m_al.flush();
+        m_thread.join();
+    }
+
+    std::thread m_thread;
+    std::atomic_flag m_running = ATOMIC_FLAG_INIT;
 };
 
 AsyncLoggingThread::AsyncLoggingThread(AsyncLogging& source, std::string_view threadName)
