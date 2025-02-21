@@ -8,6 +8,7 @@
 
 #include <itlib/pod_vector.hpp>
 #include <itlib/qalgorithm.hpp>
+
 #include <vector>
 #include <variant>
 #include <mutex>
@@ -117,18 +118,23 @@ public:
         m_loggingTextBuffer.clear();
     }
 
-    void update()
-    {
-        std::unique_lock lock(m_tasksMutex);
-        m_tasksCv.wait(lock, [this] { return !m_taskQueue.empty(); });
+    void update(std::unique_lock<std::mutex>& lock) {
+        assert(lock.owns_lock());
         swapBuffers();
         lock.unlock();
         executeTasks();
     }
 
-    void finalize()
+    void update()
     {
-        update();
+        std::unique_lock lock(m_tasksMutex);
+        m_tasksCv.wait(lock, [this] { return !m_taskQueue.empty(); });
+        update(lock);
+    }
+
+    void finalize() {
+        std::unique_lock lock(m_tasksMutex);
+        update(lock);
     }
 
     template <typename T>
@@ -172,6 +178,10 @@ public:
         pushTask(std::move(sync));
         f.wait();
     }
+
+    void wakeUp() {
+        pushTask(Synchronize{});
+    }
 };
 } // namespace impl
 
@@ -179,7 +189,8 @@ using AL = impl::AsyncLoggingImpl;
 
 AsyncLogging::AsyncLogging(size_t initialTextBufferSize)
     : m_impl(new AL(initialTextBufferSize))
-{}
+{
+}
 
 AsyncLogging::~AsyncLogging() = default;
 
@@ -190,12 +201,12 @@ void AsyncLogging::update()
 
 void AsyncLogging::add(SinkPtr sink)
 {
-    m_impl->pushTask(AL::AddSink{std::move(sink)});
+    m_impl->pushTask(AL::AddSink{ std::move(sink) });
 }
 
 void AsyncLogging::remove(const Sink* sink)
 {
-    m_impl->pushTask(AL::RemoveSink{sink});
+    m_impl->pushTask(AL::RemoveSink{ sink });
 }
 
 void AsyncLogging::record(const Entry& entry)
@@ -232,7 +243,7 @@ public:
 
     ~Impl() {
         m_running.clear(std::memory_order_release);
-        m_al.flush();
+        m_al.wakeUp();
         m_thread.join();
     }
 
