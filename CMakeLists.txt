@@ -1,7 +1,7 @@
 # Copyright (c) Borislav Stanimirov
 # SPDX-License-Identifier: MIT
 #
-cmake_minimum_required(VERSION 3.16 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.24 FATAL_ERROR)
 
 project(jalog
     LANGUAGES CXX
@@ -33,6 +33,7 @@ option(JALOG_NO_BUILTIN_ASYNC "jalog: disable builtin async logging helpers" OFF
 option(JALOG_BUILD_SINKLIB "jalog: build extension sinklib" ON)
 option(JALOG_BUILD_TESTS "jalog: build tests" ${ICM_DEV_MODE})
 option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
+option(JALOG_BUILD_BENCH "jalog: build benchmarks" ${ICM_DEV_MODE})
 
 #######################################
 # packages
@@ -61,15 +62,19 @@ if(JALOG_BUILD_SINKLIB)
     add_subdirectory(ext/sinklib)
 endif()
 
-if(ICM_DEV_MODE)
-    add_subdirectory(scratch)
+if(JALOG_BUILD_TESTS)
+    enable_testing()
+    add_subdirectory(test)
+endif()
+
+if(JALOG_BUILD_BENCH)
+    add_subdirectory(bench)
 endif()
 
 if(JALOG_BUILD_EXAMPLES)
     add_subdirectory(example)
 endif()
 
-if(JALOG_BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(test)
+if(ICM_DEV_MODE)
+    add_subdirectory(scratch)
 endif()
