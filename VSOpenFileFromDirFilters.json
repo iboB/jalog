@@ -2,6 +2,7 @@
   "dirs": [
     ".git",
     ".vs",
+    ".vscode",
     "build",
     "out",
     "tmp"
