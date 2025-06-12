@@ -1,0 +1,24 @@
+# Copyright (c) Borislav Stanimirov
+# SPDX-License-Identifier: MIT
+#
+name: Benchmark
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+jobs:
+  benchmark:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    steps:
+      - name: Clone
+        uses: actions/checkout@v4
+      - name: Install Ninja
+        uses: seanmiddleditch/gha-setup-ninja@v5
+      - name: Configure
+        run: cmake --preset release -B build
+      - name: Log types
+        run: cmake --build build --target run-bench-jalog-log-types
