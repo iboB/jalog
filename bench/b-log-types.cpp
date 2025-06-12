@@ -63,6 +63,9 @@ void stream(picobench::state& s) {
 }
 PICOBENCH(stream);
 
+#include <version>
+#if defined(__cpp_lib_format)
+
 #include <jalog/LogFmt.hpp>
 void format(picobench::state& s) {
     TestInstance jl;
@@ -72,3 +75,5 @@ void format(picobench::state& s) {
     s.set_result(jl.sink->digest());
 }
 PICOBENCH(format);
+
+#endif
