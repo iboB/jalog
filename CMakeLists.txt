@@ -76,5 +76,5 @@ if(JALOG_BUILD_EXAMPLES)
 endif()
 
 if(ICM_DEV_MODE)
-    add_subdirectory(scratch)
+    add_subdirectory(sandbox)
 endif()
