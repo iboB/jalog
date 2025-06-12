@@ -28,11 +28,11 @@ FORCE_INLINE void addEntryUnchecked(Scope& scope, Level lvl, std::string_view en
 template <uint32_t Flags>
 void VPrintf(Scope& scope, Level lvl, const char* format, va_list args)
 {
-    if constexpr ((Flags & PrintfFlags::SkipLogLevelCheck) == 0) {
+    if constexpr ((Flags & PrintFlags::SkipLogLevelCheck) == 0) {
         if (!scope.enabled(lvl)) return;
     }
 
-    static constexpr auto TrimTrailingNewline = Flags & PrintfFlags::TrimTrailingNewline;
+    static constexpr auto TrimTrailingNewline = Flags & PrintFlags::TrimTrailingNewline;
 
     va_list acopy;
     // we need to copy the va_list, because if our optimistic fit below doesn't fit, we would need to call
@@ -62,14 +62,14 @@ void VPrintf(Scope& scope, Level lvl, const char* format, va_list args)
 template <uint32_t Flags>
 void Printf(Scope& scope, Level lvl, const char* format, ...)
 {
-    if constexpr ((Flags & PrintfFlags::SkipLogLevelCheck) == 0) {
+    if constexpr ((Flags & PrintFlags::SkipLogLevelCheck) == 0) {
         if (!scope.enabled(lvl)) return;
     }
 
     va_list args;
     va_start(args, format);
     // force SkipLogLevelCheck as we already checked the level above
-    VPrintf<Flags | PrintfFlags::SkipLogLevelCheck>(scope, lvl, format, args);
+    VPrintf<Flags | PrintFlags::SkipLogLevelCheck>(scope, lvl, format, args);
     va_end(args);
 }
 

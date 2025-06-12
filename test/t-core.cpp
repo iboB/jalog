@@ -114,6 +114,9 @@ struct TestHelper
 #define tlogf(lvl, ...) JALOG_PRINTF_SCOPE(helper.scope, lvl, __VA_ARGS__)
 #define tlogf2(lvl, ...) JALOG_PRINTF_SCOPE(helper.scope2, lvl, __VA_ARGS__)
 
+#define fmtlog(lvl, ...) JALOG_FMT_SCOPE(helper.scope, lvl, __VA_ARGS__)
+#define fmtlog2(lvl, ...) JALOG_FMT_SCOPE(helper.scope, lvl, __VA_ARGS__)
+
 // logging to an unsetupped logger is safe and does nothing
 TEST_CASE("no setup")
 {
@@ -325,11 +328,11 @@ TEST_CASE("printf")
     tlogf(Debug, "foo"); // should be skipped
     tlogf(Info, "%d hello %s %.2f", 1, "bb", 3.14159);
     jalog::Printf(helper.scope, jalog::Level::Debug, "%dabc", 12); // should be skipped
-    jalog::Printf(helper.scope, jalog::Level::Error, "x%dy\n", 33); // neline is not skipped
+    jalog::Printf(helper.scope, jalog::Level::Error, "x%dy\n", 33); // newline is preserved
     jalog::Printf(helper.scope2, jalog::Level::Debug, "%dabc", 12); // should be skipped
-    jalog::Printf<jalog::PrintfFlags::SkipLogLevelCheck>(helper.scope2, jalog::Level::Debug, "hax");
-    jalog::Printf<jalog::PrintfFlags::TrimTrailingNewline>(helper.scope2, jalog::Level::Info, "%snl\n", "no");
-    jalog::Printf<jalog::PrintfFlags::TrimTrailingNewline | jalog::PrintfFlags::SkipLogLevelCheck>(
+    jalog::Printf<jalog::PrintFlags::SkipLogLevelCheck>(helper.scope2, jalog::Level::Debug, "hax");
+    jalog::Printf<jalog::PrintFlags::TrimTrailingNewline>(helper.scope2, jalog::Level::Info, "%snl\n", "no");
+    jalog::Printf<jalog::PrintFlags::TrimTrailingNewline | jalog::PrintFlags::SkipLogLevelCheck>(
         helper.scope2, jalog::Level::Debug, "no%shax\n", "nl"
     );
 
@@ -477,3 +480,64 @@ TEST_CASE("stream output")
     plog("j: ", v, ", std: ", iv);
     CHECK(e.text == "j: (3;1.12), std: 5 6");
 }
+
+#include <version>
+#if defined(__cpp_lib_format)
+
+#include <jalog/LogFmt.hpp>
+
+TEST_CASE("format")
+{
+    TestHelper helper;
+    auto& es = helper.sink().entries;
+
+    helper.scope.setLevel(jalog::Level::Info);
+    helper.scope2.setLevel(jalog::Level::Info);
+
+    fmtlog(Debug, "foo"); // should be skipped
+    fmtlog(Info, "{1} hello {0} {2:.2f}", 1, "bb", 3.14159);
+    fmtlog(Debug, "{}abc", 12); // should be skipped
+    fmtlog(Error, "x{}y\n", 33); // newline is preserved
+    fmtlog2(Debug, "{}abc", 12); // should be skipped
+    jalog::FmtPrint<jalog::PrintFlags::SkipLogLevelCheck>(helper.scope2, jalog::Level::Debug, "hax");
+    jalog::FmtPrint<jalog::PrintFlags::TrimTrailingNewline>(helper.scope2, jalog::Level::Info, "{}nl\n", "no");
+    jalog::FmtPrint<jalog::PrintFlags::TrimTrailingNewline | jalog::PrintFlags::SkipLogLevelCheck>(
+        helper.scope2, jalog::Level::Debug, "no{}hax\n", "nl"
+    );
+
+    CHECK(es.size() == 5);
+    helper.checkSinks();
+
+    {
+        auto e = helper.popFront();
+        helper.checkT1(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "bb hello 1 3.14");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT1(e);
+        CHECK(e.level == jalog::Level::Error);
+        CHECK(e.text == "x33y\n");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Debug);
+        CHECK(e.text == "hax");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "nonl");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Debug);
+        CHECK(e.text == "nonlhax");
+    }
+}
+
+#endif
