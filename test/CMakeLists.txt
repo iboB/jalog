@@ -17,13 +17,13 @@ icm_add_test(
 )
 
 macro(jalog_test test)
-    add_doctest_lib_test(${test} jalog ${ARGN})
+    add_doctest_lib_test(${test} jalog t-${test}.cpp ${ARGN})
 endmacro()
 
-jalog_test(core t-core.cpp)
-jalog_test(defaults t-defaults.cpp)
+jalog_test(core)
+jalog_test(defaults)
 
 if(NOT JALOG_NO_BUILTIN_ASYNC)
     find_package(Threads REQUIRED)
-    jalog_test(mt t-mt.cpp LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
+    jalog_test(mt LIBRARIES ${CMAKE_THREAD_LIBS_INIT})
 endif()
