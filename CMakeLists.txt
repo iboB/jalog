@@ -8,6 +8,10 @@ project(jalog
 )
 
 # cpm
+if(NOT CPM_SOURCE_CACHE AND NOT DEFINED ENV{CPM_SOURCE_CACHE})
+    set(CPM_SOURCE_CACHE "${CMAKE_SOURCE_DIR}/.cpm" CACHE PATH "CPM source cache")
+    message(STATUS "Setting cpm cache dir to: ${CPM_SOURCE_CACHE}")
+endif()
 include(./get_cpm.cmake)
 
 #######################################
