@@ -11,6 +11,20 @@
 namespace jalog
 {
 
+namespace PrintfFlags {
+enum Flags : uint32_t {
+    None = 0,
+
+    // skip checking the log level of the scope
+    // useful when this check is already done before calling Printf
+    SkipLogLevelCheck = 1,
+
+    // trim the trailing newline from the message
+    // useful when replacing existing log messages (e.g. with regular printf) which already have a newline at the end
+    TrimTrailingNewline = 2,
+};
+}
+
 class Scope;
 
 #if defined(__GNUC__)
@@ -23,11 +37,10 @@ class Scope;
 #   endif
 #endif
 
+template <uint32_t Flags = PrintfFlags::None>
+void VPrintf(Scope& scope, Level lvl, const char* format, va_list args);
 
-JALOG_API void VPrintf(Scope& scope, Level lvl, const char* format, va_list args);
-JALOG_API void VPrintfUnchecked(Scope& scope, Level lvl, const char* format, va_list args);
-
-JALOG_API I_JALOG_PRINTF_FMT void Printf(Scope& scope, Level lvl, _Printf_format_string_ const char* format, ...);
-JALOG_API I_JALOG_PRINTF_FMT void PrintfUnchecked(Scope& scope, Level lvl, _Printf_format_string_ const char* format, ...);
+template <uint32_t Flags = PrintfFlags::None>
+I_JALOG_PRINTF_FMT void Printf(Scope& scope, Level lvl, _Printf_format_string_ const char* format, ...);
 
 }

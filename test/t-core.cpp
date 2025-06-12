@@ -320,14 +320,20 @@ TEST_CASE("printf")
     auto& es = helper.sink().entries;
 
     helper.scope.setLevel(jalog::Level::Info);
+    helper.scope2.setLevel(jalog::Level::Info);
 
     tlogf(Debug, "foo"); // should be skipped
     tlogf(Info, "%d hello %s %.2f", 1, "bb", 3.14159);
     jalog::Printf(helper.scope, jalog::Level::Debug, "%dabc", 12); // should be skipped
-    jalog::Printf(helper.scope, jalog::Level::Error, "x%dy", 33);
-    jalog::PrintfUnchecked(helper.scope2, jalog::Level::Debug, "hax");
+    jalog::Printf(helper.scope, jalog::Level::Error, "x%dy\n", 33); // neline is not skipped
+    jalog::Printf(helper.scope2, jalog::Level::Debug, "%dabc", 12); // should be skipped
+    jalog::Printf<jalog::PrintfFlags::SkipLogLevelCheck>(helper.scope2, jalog::Level::Debug, "hax");
+    jalog::Printf<jalog::PrintfFlags::TrimTrailingNewline>(helper.scope2, jalog::Level::Info, "%snl\n", "no");
+    jalog::Printf<jalog::PrintfFlags::TrimTrailingNewline | jalog::PrintfFlags::SkipLogLevelCheck>(
+        helper.scope2, jalog::Level::Debug, "no%shax\n", "nl"
+    );
 
-    CHECK(es.size() == 3);
+    CHECK(es.size() == 5);
     helper.checkSinks();
 
     {
@@ -340,13 +346,25 @@ TEST_CASE("printf")
         auto e = helper.popFront();
         helper.checkT1(e);
         CHECK(e.level == jalog::Level::Error);
-        CHECK(e.text == "x33y");
+        CHECK(e.text == "x33y\n");
     }
     {
         auto e = helper.popFront();
         helper.checkT2(e);
         CHECK(e.level == jalog::Level::Debug);
         CHECK(e.text == "hax");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "nonl");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT2(e);
+        CHECK(e.level == jalog::Level::Debug);
+        CHECK(e.text == "nonlhax");
     }
 }
 
