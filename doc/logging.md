@@ -124,7 +124,11 @@ With `jalog/Printf.hpp` Jalog provides the following functions:
 * `void Printf(Scope& scope, Level lvl, const char* format, ...);`
 * `void VPrintf(Scope& scope, Level lvl, const char* format, va_list args);`
 
-It also provides the unchecked variants of those: `PrintfUnchecked` and `VPrintfUnchecked`. They have the same arguments as their "checked" counterparts but *perform no check* whether the scope is currently enabled for that level. You can use them if you have performed the check otherwise (for example the `JALOG_PRINTF` macros perform the check externally and use the unchecked variants of the functions)
+These functions are templates with a default argument. The argument itself is a flags integer which supports the follwing flags:
+
+* `PrintfFlags::SkipLogLevelCheck` - Skip checking whether the log level is enabled. This is useful if you have already checked it before calling the function. For example the `JALOG_PRINTF` macros perform the check externally and use the unchecked variants of the functions
+* `PrintfFlags::TrimTrailingNewline` - Trim the trailing newline from the log message. This might be useful when you're replacing existing `printf`-like logging which requires newlines at the end of the log message. 
+* `PrintfFlags::None` - The default: checks the log level from the scope and doesn't touch trailing newlines.
 
 A complete, buildable example, of using `printf` logging to interface with an imaginary C library can be found [here](../example/e-PrintfStyleLogging.cpp).
 
