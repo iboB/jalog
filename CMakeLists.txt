@@ -51,10 +51,10 @@ endif()
 #######################################
 # subdirs
 
-add_subdirectory(code/jalog)
+add_subdirectory(code)
 
 if(JALOG_BUILD_SINKLIB)
-    add_subdirectory(ext/jalog/sinks)
+    add_subdirectory(ext/sinklib)
 endif()
 
 if(ICM_DEV_MODE)

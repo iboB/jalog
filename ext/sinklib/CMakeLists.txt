@@ -3,27 +3,33 @@
 #
 icm_add_lib(jalog-sinklib JALOG_SINKLIB)
 add_library(jalog::sinklib ALIAS jalog-sinklib)
-target_sources(jalog-sinklib PRIVATE
-    API.h
-    AnsiColorSink.hpp
-    AnsiColorSink.cpp
+target_sources(jalog-sinklib
+    INTERFACE FILE_SET HEADERS FILES
+        jalog/sinks/API.h
+        jalog/sinks/AnsiColorSink.hpp
+        jalog/sinks/DefaultSink.hpp
+
+        # optional sinks, .cpp-s added conditionally below
+        jalog/sinks/WindowsColorSink.hpp
+        jalog/sinks/AndroidSink.hpp
+        jalog/sinks/NSLogSink.hpp
+    PRIVATE
+        jalog/sinks/AnsiColorSink.cpp
 )
 
 if(WIN32)
     target_sources(jalog-sinklib PRIVATE
-        WindowsColorSink.hpp
-        WindowsColorSink.cpp
+
+        jalog/sinks/WindowsColorSink.cpp
     )
 elseif(ANDROID)
     target_sources(jalog-sinklib PRIVATE
-        AndroidSink.hpp
-        AndroidSink.cpp
+        jalog/sinks/AndroidSink.cpp
     )
     target_link_libraries(jalog-sinklib PRIVATE log)
 elseif(APPLE)
     target_sources(jalog-sinklib PRIVATE
-        NSLogSink.hpp
-        NSLogSink.mm
+        jalog/sinks/NSLogSink.mm
     )
     find_library(COCOA Cocoa)
     if(COCOA)
@@ -33,5 +39,4 @@ elseif(APPLE)
     endif()
 endif()
 
-target_include_directories(jalog-sinklib INTERFACE ../..)
 target_link_libraries(jalog-sinklib PUBLIC jalog)
