@@ -5,6 +5,7 @@
 #include <jalog/Sink.hpp>
 #include <cstddef>
 #include <utility>
+#include <string_view>
 
 class BenchSink final : public jalog::Sink {
 public:
