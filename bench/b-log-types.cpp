@@ -12,7 +12,6 @@ struct TestInstance {
     jalog::Logger logger;
     std::shared_ptr<BenchSink> sink;
     jalog::Scope sa{logger, "sa"};
-    jalog::Scope sb{logger, "sb"};
 
     TestInstance()
         : sink(std::make_shared<BenchSink>())

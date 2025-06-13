@@ -16,6 +16,12 @@ public:
     size_t reset() {
         return std::exchange(m_digest, 0);
     }
+
+    template <typename T>
+    static void hashAppend(std::size_t& digest, T t) {
+        digest ^= std::hash<T>{}(t)+0x9e3779b9 + (digest << 6) + (digest >> 2);
+    }
+
 private:
     size_t m_digest = 0;
 };
