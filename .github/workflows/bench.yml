@@ -20,5 +20,7 @@ jobs:
         uses: seanmiddleditch/gha-setup-ninja@v5
       - name: Configure
         run: cmake --preset release -B build
-      - name: Log types
+      - name: Benchmark jalog log types
         run: cmake --build build --target run-bench-jalog-log-types
+      - name: Benchmark jalog vs spdlog
+        run: cmake --build build --target run-bench-jalog-vs-spdlog

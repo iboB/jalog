@@ -19,8 +19,8 @@ macro(jalog_benchmark name)
     set(tgt bench-jalog-${name})
     add_executable(${tgt})
     set_target_properties(${tgt} PROPERTIES FOLDER bench)
-    target_sources(${tgt} PRIVATE b-${name}.cpp ${ARGN})
-    target_link_libraries(${tgt} jalog::jalog jalog-picobench-main jalog-bench-sink)
+    target_sources(${tgt} PRIVATE b-${name}.cpp)
+    target_link_libraries(${tgt} jalog::jalog jalog-picobench-main jalog-bench-sink ${ARGN})
     add_custom_target(
         run-${tgt}
         COMMAND ${tgt}
@@ -29,3 +29,7 @@ macro(jalog_benchmark name)
 endmacro()
 
 jalog_benchmark(log-types)
+
+
+CPMAddPackage(gh:gabime/spdlog@1.15.3)
+jalog_benchmark(vs-spdlog spdlog::spdlog)
