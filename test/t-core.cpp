@@ -6,6 +6,7 @@
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
 #include <jalog/LogStream.hpp>
+#include <jalog/DefaultLogger.hpp>
 
 #include <jalog/Logger.hpp>
 #include <jalog/DefaultScope.hpp>
@@ -15,6 +16,8 @@ TEST_SUITE_BEGIN("jalog");
 TEST_CASE("scopes")
 {
     jalog::Scope s1("s1", 1, 2);
+
+    CHECK(&s1.logger() == &jalog::DefaultLogger());
 
     auto& s1d = s1.desc();
     CHECK(s1d.id() == 1);
@@ -39,6 +42,7 @@ TEST_CASE("scopes")
 TEST_CASE("default scope")
 {
     auto& s = jalog::Default_Scope;
+    CHECK(&s.logger() == &jalog::DefaultLogger());
     auto& sd = s.desc();
     CHECK(sd.id() == 0);
     CHECK(sd.label().empty());
@@ -140,6 +144,9 @@ TEST_CASE("log scopes")
     const uint64_t start = nanotime();
 
     TestHelper helper(3);
+    CHECK(&helper.scope.logger() == &helper.logger);
+    CHECK(&helper.scope2.logger() == &helper.logger);
+
     tlog(Debug, "dbg");
     tlog(Info, "info");
     tlogf(Warning, "warn%d", 1);
