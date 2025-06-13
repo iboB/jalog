@@ -122,7 +122,8 @@ void jalog_mt(picobench::state& s) {
 PICOBENCH(jalog_mt);
 
 void spdlog_mt(picobench::state& s) {
-    auto sink = std::make_shared<SpdlogHashingSink<std::mutex>>();
+    //auto sink = std::make_shared<SpdlogHashingSink<std::mutex>>();
+    auto sink = std::make_shared<SpdlogHashingSink<spdlog::details::null_mutex>>();
     spdlog::init_thread_pool(s.iterations(), 1);
     auto logger = std::make_shared<spdlog::async_logger>("mt", sink, spdlog::thread_pool());
 
