@@ -28,6 +28,12 @@ TEST_CASE("bench sink") {
 
     CHECK(d == sink->reset());
 
+    // check that order doesn't mg
+    JALOG_SCOPE(scope, Debug, "bar");
+    JALOG_SCOPE(scope, Info, "foo");
+
+    CHECK(d == sink->reset());
+
     JALOG_PRINTF_SCOPE(scope, Info, "foo");
     JALOG_PRINTF_SCOPE(scope, Debug, "bar");
 
