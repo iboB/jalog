@@ -27,7 +27,7 @@ TEST_CASE("scopes")
     CHECK(s1d.userData == 2);
 
     CHECK(s1.level() == jalog::Level::Off);
-    s1.setLevel(jalog::Level::Error);
+    CHECK(s1.setLevel(jalog::Level::Error) == jalog::Level::Off);
     CHECK(s1.level() == jalog::Level::Error);
     CHECK_FALSE(s1.enabled(jalog::Level::Debug));
     CHECK_FALSE(s1.enabled(jalog::Level::Info));
@@ -233,21 +233,21 @@ TEST_CASE("levels")
 
     argCounter = 0;
     es.clear();
-    helper.scope.setLevel(jalog::Level::Error);
+    CHECK(helper.scope.setLevel(jalog::Level::Error) == jalog::Level::Debug);
     logAll();
     CHECK(argCounter == 2);
     CHECK(es.size() == 2);
 
     argCounter = 0;
     es.clear();
-    helper.scope.setLevel(jalog::Level::Off);
+    CHECK(helper.scope.setLevel(jalog::Level::Off) == jalog::Level::Error);
     for (int i=0; i<10; ++i) logAll();
     CHECK(argCounter == 0);
     CHECK(es.empty());
 
     argCounter = 0;
     es.clear();
-    helper.scope.setLevel(jalog::Level::Warning);
+    CHECK(helper.scope.setLevel(jalog::Level::Warning) == jalog::Level::Off);
     logAll();
     CHECK(argCounter == 3);
     CHECK(es.size() == 3);
