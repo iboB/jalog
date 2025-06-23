@@ -20,8 +20,8 @@ Instance::SetupDSL::~SetupDSL() {
     m_instance.m_logger.initialize();
 }
 
-Instance::SetupDSL& Instance::SetupDSL::defaultLevel(Level lvl) {
-    m_instance.m_logger.setDefaultLevel(lvl);
+Instance::SetupDSL& Instance::SetupDSL::overrideInitialLevel(Level lvl) {
+    m_instance.m_logger.setInitialLevelOverride(lvl);
     return *this;
 }
 

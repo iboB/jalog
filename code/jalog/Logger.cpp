@@ -25,16 +25,16 @@ Scope Default_Scope(std::string_view{});
 Logger::Logger() = default;
 Logger::~Logger() = default;
 
-void Logger::setDefaultLevel(Level lvl)
+void Logger::setInitialLevelOverride(std::optional<Level> lvl)
 {
     std::lock_guard l(m_mutex);
-    m_defaultLevel = lvl;
+    m_initialLevelOverride = lvl;
 }
 
-Level Logger::defaultLevel() const
+std::optional<Level> Logger::initialLevelOverride() const
 {
     std::lock_guard l(m_mutex);
-    return m_defaultLevel;
+    return m_initialLevelOverride;
 }
 
 void Logger::flush()
@@ -79,7 +79,7 @@ void Logger::initScope(Scope& scope)
 {
     assert(scope.m_sinks.empty());
     scope.m_sinks = m_scopeSinks;
-    scope.setLevel(m_defaultLevel);
+    scope.setLevel(m_initialLevelOverride.value_or(scope.m_initialLevel));
 }
 
 void Logger::registerScope(Scope& scope)
@@ -122,9 +122,9 @@ Logger::SetupDSL::~SetupDSL()
     m_logger.initialize();
 }
 
-Logger::SetupDSL& Logger::SetupDSL::defaultLevel(Level lvl)
+Logger::SetupDSL& Logger::SetupDSL::overrideInitialLevel(Level lvl)
 {
-    m_logger.setDefaultLevel(lvl);
+    m_logger.setInitialLevelOverride(lvl);
     return *this;
 }
 

@@ -15,7 +15,7 @@ TEST_SUITE_BEGIN("jalog");
 
 TEST_CASE("scopes")
 {
-    jalog::Scope s1("s1", 1, 2);
+    jalog::Scope s1("s1", jalog::Level::Debug, 1, 2);
 
     CHECK(&s1.logger() == &jalog::DefaultLogger());
 
@@ -53,8 +53,8 @@ TEST_CASE("default scope")
 struct TestHelper
 {
     TestHelper(int numSinks = 2)
-        : scope(logger, "t1", 1, 2)
-        , scope2(logger, "t2", 3, 4)
+        : scope(logger, "t1", jalog::Level::Debug, 1, 2)
+        , scope2(logger, "t2", jalog::Level::Debug, 3, 4)
     {
         REQUIRE(numSinks >= 1);
         auto setup = logger.directSetup();
@@ -125,7 +125,7 @@ struct TestHelper
 TEST_CASE("no setup")
 {
     jalog::Logger uLogger;
-    jalog::Scope uScope(uLogger, "u", 1, 2);
+    jalog::Scope uScope(uLogger, "u", jalog::Level::Debug, 1, 2);
 
     JALOG_SCOPE(uScope, Info, "asdf");
 
@@ -214,7 +214,7 @@ TEST_CASE("levels")
     auto& es = helper.sink().entries;
 
     // shouldn't affect already created scopes
-    helper.logger.setDefaultLevel(jalog::Level::Off);
+    helper.logger.setInitialLevelOverride(jalog::Level::Off);
 
     int argCounter = 0;
     auto arg = [&]() { return argCounter++; };
@@ -259,8 +259,8 @@ TEST_CASE("new scopes")
     tlog(Info, "foo");
 
     {
-        helper.logger.setDefaultLevel(jalog::Level::Warning);
-        jalog::Scope newScope(helper.logger, "ns1", 10, 20);
+        helper.logger.setInitialLevelOverride(jalog::Level::Warning);
+        jalog::Scope newScope(helper.logger, "ns1", jalog::Level::Debug, 10, 20);
         JALOG_SCOPE(newScope, Debug, "dbg1"); // should be skipped
         JALOG_SCOPE(newScope, Info, "info1"); // should be skipped
         JALOG_SCOPE(newScope, Warning, "warn1");
@@ -268,16 +268,26 @@ TEST_CASE("new scopes")
     }
 
     {
-        helper.logger.setDefaultLevel(jalog::Level::Info);
-        jalog::Scope newScope(helper.logger, "ns2", 30, 40);
+        helper.logger.setInitialLevelOverride(jalog::Level::Info);
+        jalog::Scope newScope(helper.logger, "ns2", jalog::Level::Debug, 30, 40);
         JALOG_SCOPE(newScope, Debug, "dbg2"); // should be skipped
         JALOG_SCOPE(newScope, Info, "info2");
         JALOG_SCOPE(newScope, Warning, "warn2");
         tlog(Debug, "baz");
     }
 
+    {
+        CHECK(helper.logger.initialLevelOverride() == jalog::Level::Info);
+        helper.logger.setInitialLevelOverride(std::nullopt);
+        jalog::Scope newScope(helper.logger, "ns3", jalog::Level::Warning, 50, 60);
+        JALOG_SCOPE(newScope, Debug, "dbg3"); // should be skipped
+        JALOG_SCOPE(newScope, Info, "info3"); // should be skipped
+        JALOG_SCOPE(newScope, Warning, "warn3");
+        tlog(Info, "buz");
+    }
+
     auto& es = helper.sink().entries;
-    CHECK(es.size() == 6);
+    CHECK(es.size() == 8);
     helper.checkSinks();
 
     {
@@ -321,6 +331,20 @@ TEST_CASE("new scopes")
         helper.checkT1(e);
         CHECK(e.level == jalog::Level::Debug);
         CHECK(e.text == "baz");
+    }
+    {
+        auto e = helper.popFront();
+        CHECK(e.scope.label() == "ns3");
+        CHECK(e.scope.id() == 50);
+        CHECK(e.scope.userData == 60);
+        CHECK(e.level == jalog::Level::Warning);
+        CHECK(e.text == "warn3");
+    }
+    {
+        auto e = helper.popFront();
+        helper.checkT1(e);
+        CHECK(e.level == jalog::Level::Info);
+        CHECK(e.text == "buz");
     }
 }
 

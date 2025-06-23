@@ -10,7 +10,7 @@ Any attempts to do logging outside of the lifetime of this object (though perfec
 
 `jalog::Instance::setup` returns a `jalog::Instance::SetupDSL` which itself has these basic setup methods:
 
-* `defaultLevel(jalog::Level)` - set the default level for the logger. This is relevant for newly created scopes (more on scope creation [here](creating-scopes.md)).
+* `overrideInitialLevel(std::optional<jalog::Level>)` - override the initial for new scopes (more on scope creation [here](creating-scopes.md)).
 * `template <T, ...Args> add(Args&&...)` - add a sink by type. This call forwards its arguments the arguments to the sink's constructor.
 * `add(std::shared_ptr<Sink>)` - add a sink which already has a instance in a shared pointer (more on sink creation [here](custom-sinks.md)).
 * `async()` - initiate setup of the built-in asynchronous logging (more about it [here](async.md))

@@ -24,7 +24,7 @@ public:
     public:
         explicit SetupDSL(Instance& i) : m_instance(i) {}
         ~SetupDSL();
-        SetupDSL& defaultLevel(Level lvl);
+        SetupDSL& overrideInitialLevel(Level lvl);
         SetupDSL& add(SinkPtr sink);
         template <typename S, typename... Args>
         SetupDSL& add(Args&&... args) { return add(std::make_shared<S>(std::forward<Args>(args)...)); }

@@ -13,8 +13,9 @@
 namespace jalog
 {
 
-Scope::Scope(Logger& logger, std::string_view lbl, uintptr_t id, intptr_t userData)
-    : m_logger(logger)
+Scope::Scope(Logger& logger, std::string_view lbl, Level initialLevel, uintptr_t id, intptr_t userData)
+    : m_initialLevel(initialLevel)
+    , m_logger(logger)
 {
     auto len = std::min(lbl.length(), sizeof(m_desc.m_labelBytes) - 1);
     if (len > 0) {
@@ -29,8 +30,8 @@ Scope::Scope(Logger& logger, std::string_view lbl, uintptr_t id, intptr_t userDa
     m_logger.registerScope(*this);
 }
 
-Scope::Scope(std::string_view label, uintptr_t id, intptr_t userData)
-    : Scope(DefaultLogger(), label, id, userData)
+Scope::Scope(std::string_view label, Level initialLevel, uintptr_t id, intptr_t userData)
+    : Scope(DefaultLogger(), label, initialLevel, id, userData)
 {}
 
 Scope::~Scope()

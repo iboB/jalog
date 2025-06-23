@@ -42,7 +42,7 @@ TEST_CASE("mt")
 
         REQUIRE(!!ji.asyncLogging());
 
-        jalog::Scope common(jl, "common", 1, 2);
+        jalog::Scope common(jl, "common", jalog::Level::Debug, 1, 2);
 
         clog("before tmp");
 
@@ -51,7 +51,7 @@ TEST_CASE("mt")
         clog("starting t", 1);
         std::thread t1([&]() {
             clog("in t", 1);
-            jalog::Scope st(jl, "st1", 10, 20);
+            jalog::Scope st(jl, "st1", jalog::Level::Debug, 10, 20);
             tlog(1);
             tlog(2);
             clog("mix", 1);
@@ -61,7 +61,7 @@ TEST_CASE("mt")
         clog("starting t", 2);
         std::thread t2([&]() {
             clog("in t", 2);
-            jalog::Scope st(jl, "st2", 50, 80);
+            jalog::Scope st(jl, "st2", jalog::Level::Debug, 50, 80);
             tlog(5);
             tlog(6);
             clog("mix", 2);

@@ -13,7 +13,7 @@
 
 TEST_SUITE_BEGIN("jalog");
 
-jalog::Scope gscope("g", 10, 20);
+jalog::Scope gscope("g", jalog::Level::Debug, 10, 20);
 
 JALOG_DEFINE_PRINTF_FUNC(log_gscope, gscope)
 
@@ -23,14 +23,14 @@ TEST_CASE("default logger/scope")
     auto& es = sink->entries;
     jalog::Instance i;
     i.setup()
-        .defaultLevel(jalog::Level::Info)
+        .overrideInitialLevel(jalog::Level::Info)
         .add(sink);
 
     JALOG(Debug, "dbg", 1);
     JALOG_PRINTF(Info, "info%d", 1);
     JALOG(Error, "error", 1);
 
-    jalog::Scope scope("s1", 1, 2);
+    jalog::Scope scope("s1", jalog::Level::Debug, 1, 2);
     JALOG_SCOPE(scope, Debug, "dbg", 2);
     JALOG_SCOPE(scope, Info, "info", 2);
     JALOG_PRINTF_SCOPE(scope, Critical, "crit%d", 2);

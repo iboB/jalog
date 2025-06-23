@@ -21,10 +21,10 @@ class JALOG_API Scope
 {
 public:
     // creates a default logger scope
-    explicit Scope(std::string_view label, uintptr_t id = 0, intptr_t userData = -1);
+    explicit Scope(std::string_view label, Level initialLevel = Level::Debug, uintptr_t id = 0, intptr_t userData = -1);
 
     // creates a scope for a given logger
-    Scope(Logger& logger, std::string_view label, uintptr_t id = 0, intptr_t userData = -1);
+    Scope(Logger& logger, std::string_view label, Level initialLevel = Level::Debug, uintptr_t id = 0, intptr_t userData = -1);
 
     ~Scope();
 
@@ -52,7 +52,8 @@ public:
 private:
     friend class Logger;
 
-    std::atomic<Level> m_level = Level::Debug;
+    std::atomic<Level> m_level = Level::Off;
+    Level m_initialLevel; // initial level, used when the scope is initialized by the logger
 
 protected:
     Logger& m_logger;

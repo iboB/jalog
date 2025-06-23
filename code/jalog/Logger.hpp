@@ -9,6 +9,7 @@
 
 #include <vector>
 #include <mutex>
+#include <optional>
 
 namespace jalog
 {
@@ -33,7 +34,7 @@ public:
     public:
         explicit SetupDSL(Logger& l);
         ~SetupDSL();
-        SetupDSL& defaultLevel(Level lvl);
+        SetupDSL& overrideInitialLevel(Level lvl);
         SetupDSL& add(SinkPtr sink);
         template <typename S, typename... Args>
         SetupDSL& add(Args&&... args) { return add(std::make_shared<S>(std::forward<Args>(args)...)); }
@@ -45,8 +46,8 @@ public:
 
     // default level for newly created scopes
     // scopes set their own level afterwards
-    void setDefaultLevel(Level lvl);
-    Level defaultLevel() const;
+    void setInitialLevelOverride(std::optional<Level> lvl);
+    std::optional<Level> initialLevelOverride() const;
 
     // iterate scopes with a functor
     // if the functor returns true, stops the iteration
@@ -78,7 +79,7 @@ private:
     bool m_initialized = false;
 
     // scope registry
-    Level m_defaultLevel = Level::Debug;
+    std::optional<Level> m_initialLevelOverride;
     friend class Scope;
     void registerScope(Scope& scope);
     void unregisterScope(Scope& scope);

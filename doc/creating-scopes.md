@@ -18,10 +18,11 @@ JALOG_SCOPE(jalog::Default_Scope, Info, "Logging in Jalog's default scope");
 
 ## Defining Scopes
 
-The constructor of `jalog::Scope` takes three arguments:
+The constructor of `jalog::Scope` takes four arguments:
 
-* `Scope(std::string_view label, uintptr_t id = 0, intptr_t userData = -1)`
+* `Scope(std::string_view label, Level initialLvl, uintptr_t id = 0, intptr_t userData = -1)`
     * `label` - the label of the scope which is to appear in your log messages when you view them. Using the same label for multiple scopes is safe (though it will likely be confusing when you read logs).
+    * `initialLvl` - the initial log level of the scope. This is the level that will be used when the scope is created. The default value is `Level::Debug`. You can change the level of the scope later using `setLevel`.
     * `id` and `data` - which are user provided arguments with default values. You can make use of them in custom sinks. Jalog stores them, but doesn't use them in any way. See [Custom Sinks](custom-sinks.md) about creating custom sinks.
 
 
@@ -50,7 +51,7 @@ The lifetime of scopes is in no way bound to the lifetime of `jalog::Instance` w
 
 ## Managing Scopes
 
-As mentioned in the [Basics tutorial](basics.md) you can set a default log level for all scopes when you setup you Jalog instance. This is only meant for newly created scopes. A scope created before setting up your Jalog instance, will have its level set to `Off`. Once the instance is setup, the levels of all living scopes will be set to te instance's default level. Any scope created after the instance's setup will have its level set to the instance's default level.
+As mentioned in the [Basics tutorial](basics.md) you can set a override log level for all scopes when you setup you Jalog instance. This is only meant for newly created scopes. 
 
 Once the instance has been setup you can individually set the level of each scope using `setLevel`. For example:
 
