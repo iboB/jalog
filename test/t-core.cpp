@@ -268,8 +268,10 @@ TEST_CASE("new scopes")
     }
 
     {
-        helper.logger.setInitialLevelOverride(jalog::Level::Info);
-        jalog::Scope newScope(helper.logger, "ns2", jalog::Level::Debug, 30, 40);
+        helper.logger.setInitialLevelOverride(jalog::Level::Debug);
+        // the initial level override won't override the scope's own initial level
+        // as the scope's initial level is higher than the override
+        jalog::Scope newScope(helper.logger, "ns2", jalog::Level::Info, 30, 40);
         JALOG_SCOPE(newScope, Debug, "dbg2"); // should be skipped
         JALOG_SCOPE(newScope, Info, "info2");
         JALOG_SCOPE(newScope, Warning, "warn2");
@@ -277,8 +279,7 @@ TEST_CASE("new scopes")
     }
 
     {
-        CHECK(helper.logger.initialLevelOverride() == jalog::Level::Info);
-        helper.logger.setInitialLevelOverride(std::nullopt);
+        CHECK(helper.logger.initialLevelOverride() == jalog::Level::Debug);
         jalog::Scope newScope(helper.logger, "ns3", jalog::Level::Warning, 50, 60);
         JALOG_SCOPE(newScope, Debug, "dbg3"); // should be skipped
         JALOG_SCOPE(newScope, Info, "info3"); // should be skipped
