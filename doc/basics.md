@@ -22,7 +22,7 @@ jalog::Instance jl;
 jl.setup()
     .add<jalog::sinks::ColorSink>()
     .add(mySink)
-    .defaultLevel(jalog::Level::Info);
+    .overrideInitialLevel(jalog::Level::Info);
 ```
 
 The more verbose, but equivalent, alternative would be:
@@ -33,7 +33,7 @@ jalog::Instance jl;
     auto setup = jl.setup();
     setup.add<jalog::sinks::ColorSink>();
     setup.add(mysink);
-    setup.defaultLevel(jalog::Level::Info);
+    setup.overrideInitialLevel(jalog::Level::Info);
 }
 ```
 
