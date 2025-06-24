@@ -15,10 +15,25 @@ namespace jalog::sinks
 class SimpleStdioSink final : public Sink
 {
 public:
-    SimpleStdioSink(FILE* out = stdout, FILE* err = nullptr)
+    enum class TakeOwnership { No, Yes };
+
+    SimpleStdioSink(TakeOwnership t, FILE* out, FILE* err = nullptr)
         : m_out(out)
         , m_err(err ? err : out)
+        , m_ownsFiles(t == TakeOwnership::Yes)
     {}
+
+    explicit SimpleStdioSink(FILE* out = stdout, FILE* err = nullptr)
+        : SimpleStdioSink(TakeOwnership::No, out, err)
+    {}
+
+    ~SimpleStdioSink() {
+        if (!m_ownsFiles) return;
+        if (m_err != m_out) {
+            fclose(m_err);
+        }
+        fclose(m_out);
+    }
 
     static const char* levelToString(Level l)
     {
@@ -65,6 +80,7 @@ public:
 private:
     FILE* m_out;
     FILE* m_err;
+    bool m_ownsFiles = false;
 };
 
 }
