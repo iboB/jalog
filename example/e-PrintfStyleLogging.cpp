@@ -6,6 +6,7 @@
 #include <jalog/Scope.hpp>
 #include <jalog/Log.hpp>
 #include <jalog/Printf.hpp>
+#include <jalog/PrintfWrap.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // this is an imaginary c library
@@ -35,13 +36,8 @@ void JalogForCLib_Info(const char* fmt, ...)
     va_end(args);
 }
 
-void JalogForCLib_Error(const char* fmt, ...)
-{
-    va_list args;
-    va_start(args, fmt);
-    jalog::VPrintf(clibScope, jalog::Level::Error, fmt, args);
-    va_end(args);
-}
+// or alternatively, use the PrintfWrap function
+auto JalogForCLib_Error = jalog::PrintfWrap<clibScope, jalog::Level::Error>;
 
 int main()
 {

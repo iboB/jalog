@@ -15,7 +15,8 @@ TEST_SUITE_BEGIN("jalog");
 
 jalog::Scope gscope("g", jalog::Level::Debug, 10, 20);
 
-JALOG_DEFINE_PRINTF_FUNC(log_gscope, gscope)
+template <jalog::Level lvl>
+auto log_gscope = jalog::PrintfWrap<gscope, lvl>;
 
 TEST_CASE("default logger/scope")
 {
