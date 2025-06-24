@@ -78,7 +78,7 @@ private:
     bool m_initialized = false;
 
     // scope registry
-    Level m_initialLevelOverride = Level::Debug;
+    Level m_initialLevelOverride = Level::Lowest;
     friend class Scope;
     void registerScope(Scope& scope);
     void unregisterScope(Scope& scope);

@@ -10,7 +10,8 @@ namespace jalog
 
 enum class Level : uint32_t
 {
-    Debug,
+    Lowest,
+    Debug = Lowest,
     Info,
     Warning,
     Error,
