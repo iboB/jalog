@@ -5,6 +5,7 @@
 #include "API.h"
 #include "PrintFlags.hpp"
 #include "Scope.hpp"
+#include <itlib/small_vector.hpp>
 #include <format>
 #include <iterator>
 
