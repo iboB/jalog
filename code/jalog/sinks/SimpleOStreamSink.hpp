@@ -21,6 +21,10 @@ public:
         , m_err(err)
     {}
 
+    explicit SimpleOStreamSink(std::ostream& out)
+        : SimpleOStreamSink(out, out)
+    {}
+
     static constexpr std::string_view levelToString(Level l)
     {
         switch (l)
