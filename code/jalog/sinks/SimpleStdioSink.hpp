@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #pragma once
+#include "TakeOwnership.hpp"
 #include "../Sink.hpp"
 #include "../Entry.hpp"
 
@@ -15,8 +16,6 @@ namespace jalog::sinks
 class SimpleStdioSink final : public Sink
 {
 public:
-    enum class TakeOwnership { No, Yes };
-
     SimpleStdioSink(TakeOwnership t, FILE* out, FILE* err = nullptr)
         : m_out(out)
         , m_err(err ? err : out)
