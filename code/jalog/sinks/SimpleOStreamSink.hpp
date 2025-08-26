@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #pragma once
+#include "SinkFlags.hpp"
 #include "../Sink.hpp"
 #include "../Entry.hpp"
 
@@ -16,13 +17,14 @@ namespace jalog::sinks
 class SimpleOStreamSink final : public Sink
 {
 public:
-    SimpleOStreamSink(std::ostream& out, std::ostream& err)
+    SimpleOStreamSink(std::ostream& out, std::ostream& err, SinkFlags flags = {})
         : m_out(out)
         , m_err(err)
+        , m_flags(flags)
     {}
 
-    explicit SimpleOStreamSink(std::ostream& out)
-        : SimpleOStreamSink(out, out)
+    explicit SimpleOStreamSink(std::ostream& out, SinkFlags flags = {})
+        : SimpleOStreamSink(out, out, flags)
     {}
 
     static constexpr std::string_view levelToString(Level l)
@@ -45,7 +47,7 @@ public:
         }();
 
         // time
-        {
+        if (m_flags.printTimestamp) {
             using namespace std::chrono;
             itlib::time_t tt(system_clock::to_time_t(entry.timestamp));
             auto tm = tt.localtime();
@@ -79,6 +81,7 @@ public:
 private:
     std::ostream& m_out;
     std::ostream& m_err;
+    SinkFlags m_flags;
 };
 
 }

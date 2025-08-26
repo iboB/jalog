@@ -3,6 +3,7 @@
 //
 #pragma once
 #include "TakeOwnership.hpp"
+#include "SinkFlags.hpp"
 #include "../Sink.hpp"
 #include "../Entry.hpp"
 
@@ -16,14 +17,15 @@ namespace jalog::sinks
 class SimpleStdioSink final : public Sink
 {
 public:
-    SimpleStdioSink(TakeOwnership t, FILE* out, FILE* err = nullptr)
+    SimpleStdioSink(TakeOwnership t, FILE* out, FILE* err = nullptr, SinkFlags flags = {})
         : m_out(out)
         , m_err(err ? err : out)
+        , m_flags(flags)
         , m_ownsFiles(t == TakeOwnership::Yes)
     {}
 
-    explicit SimpleStdioSink(FILE* out = stdout, FILE* err = nullptr)
-        : SimpleStdioSink(TakeOwnership::No, out, err)
+    explicit SimpleStdioSink(FILE* out = stdout, FILE* err = nullptr, SinkFlags flags = {})
+        : SimpleStdioSink(TakeOwnership::No, out, err, flags)
     {}
 
     ~SimpleStdioSink() {
@@ -51,7 +53,7 @@ public:
         FILE* out = entry.level < Level::Error ? m_out : m_err;
 
         // time
-        {
+        if (m_flags.printTimestamp) {
             using namespace std::chrono;
             itlib::time_t tt(system_clock::to_time_t(entry.timestamp));
             auto tm = tt.localtime();
@@ -79,6 +81,7 @@ public:
 private:
     FILE* m_out;
     FILE* m_err;
+    SinkFlags m_flags;
     bool m_ownsFiles = false;
 };
 
