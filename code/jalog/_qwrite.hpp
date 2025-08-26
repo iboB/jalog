@@ -3,8 +3,7 @@
 //
 #pragma once
 #include "API.h"
-
-#include <splat/inline.h>
+#include "_q_char_alloc.hpp"
 
 #include <itlib/small_vector.hpp>
 #include <itlib/mem_streambuf.hpp>
@@ -15,21 +14,6 @@ namespace jalog::qwrite {
 using streambuf = std::streambuf;
 #else
 // for the actual library use the final type to avoid virtual calls in std::streambuf
-
-struct q_char_alloc : public std::allocator<char> {
-    using super = std::allocator<char>;
-    using value_type = super::value_type;
-    using size_type = super::size_type;
-    using difference_type = super::difference_type;
-    using propagate_on_container_move_assignment = super::propagate_on_container_move_assignment;
-
-    // create special noop construct/destroy funcs
-    template <typename... Args>
-    FORCE_INLINE void construct(char*, Args&&...) {}
-    template <typename... Args>
-    FORCE_INLINE void destroy(char*) {}
-};
-
 using streambuf = itlib::mem_ostreambuf<itlib::small_vector<char, 1024, 0, q_char_alloc>>;
 #endif
 
