@@ -9,6 +9,7 @@
 #include "Scope.hpp"
 
 #include <ostream>
+#include <optional>
 #include <type_traits>
 
 namespace jalog
@@ -26,7 +27,6 @@ public:
     BasicStream(Scope& scope, Level lvl)
         : m_scope(scope)
         , m_level(lvl)
-        , m_stream(&m_streambuf)
     {}
 
     using Self = BasicStream;
@@ -79,12 +79,19 @@ public:
     template <typename T>
     Self& operator,(const T& t)
     {
-        if constexpr (std::is_integral_v<T>)
+        if constexpr (std::is_integral_v<T>) {
             qwrite::write_integer(m_streambuf, qwrite::wrapped_integer<T, 10>{t});
-        else if constexpr (std::is_floating_point_v<T>)
+        }
+        else if constexpr (std::is_floating_point_v<T>) {
             qwrite::write_float(m_streambuf, t);
-        else // fallback to std::ostream operator <<
-            m_stream << t;
+        }
+        else {
+            // fallback to std::ostream operator <<
+            if (!m_stream) {
+                m_stream.emplace(&m_streambuf);
+            }
+            *m_stream << t;
+        }
         return *this;
     }
 
@@ -93,7 +100,7 @@ protected:
     Level m_level;
 
     qwrite::streambuf m_streambuf;
-    std::ostream m_stream;
+    std::optional<std::ostream> m_stream;
 };
 
 }
