@@ -35,8 +35,8 @@ TEST_CASE("scopes")
     CHECK(s1.enabled(jalog::Level::Error));
     CHECK(s1.enabled(jalog::Level::Critical));
 
-    jalog::Scope longname("0123456789ABCDEFG");
-    CHECK(longname.desc().label() == "0123456789ABCDE");
+    jalog::Scope longname("0123456789ABCDEFGHIJKLMNOP");
+    CHECK(longname.desc().label() == "0123456789ABCDEFGHI");
 }
 
 TEST_CASE("default scope")

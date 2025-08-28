@@ -12,7 +12,7 @@ class ScopeDesc
 {
     friend class Scope;
 
-    char m_labelBytes[16];
+    char m_labelBytes[20];
     uint32_t m_labelLength;
 
     uintptr_t m_id;

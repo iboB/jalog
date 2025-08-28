@@ -46,31 +46,11 @@ int main()
 #endif
     ;
 
-    jalog::Scope Algos("Algorithms");
+    JALOG(Info, "Hello ", sizeof(jalog::ScopeDesc));
 
-    int* p = new int[12];
-
-    JALOG(Info, "Hello ", 3, " times");
-    JALOG(Info, "Something or other");
-    JALOG(Info, "P is ", p);
-    JALOG_SCOPE(Algos, Info, "Initializing algos");
-    JALOG(Debug, "iteration ", 0);
-    JALOG(Debug, "iteration ", jalog::base<2>(53));
-    JALOG_SCOPE(Algos, Warning, "Algos initialized with missing stuff");
-    JALOG_PRINTF(Info, "Done %d", 43);
-    JALOG(Warning, "Result was calculated but not really good ", 3.33);
-    JALOG(Info, "Going further");
-    JALOG(Info, "Doing stuff: ", true);
-    JALOG(Error, "Something bad happened");
-    JALOG(Critical, "Something REALLY bad happened");
-
-    jl.logger().flush();
-    //exit(1);
 
     math::vec v = {1, 2};
     JALOG(Info, "vec: ", v);
-
-    delete[] p;
 
     return 0;
 }
