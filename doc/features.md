@@ -30,9 +30,9 @@ The library provides a default scope instance.
 
 ## Sinks
 
-Sinks are the places where the log messages "go". `jalog::Sink` is a class with a single pure virtual method which accepts a log entry. They are the means to customize and extend the library.
+Sinks are the places where the log messages "go". `jalog::Sink` is a class with two virtual methods to accept a log entry and to flush. Sinks are the means to customize and extend the library.
 
-The library itself provides two "bare-bones" sinks, and additional sinks are available in the [Jalog.Sinklib](sinklib.md) extension library.
+The library itself provides [several general purpose sinks](sinks.md).
 
 ## Loggers
 

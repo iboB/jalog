@@ -38,6 +38,5 @@ Jalog's CMakeLists offers several configuration options:
 
 * `JALOG_STATIC` - Whether to build a static library. Off by default, leading to a shared library. It's highly recommended to build Jalog as a shared library if there are multiple shared libraries which use Jalog in your project. The build scripts respect `ICM_STATIC_LIBS` from [icm_add_lib](https://github.com/iboB/icm/blob/master/icm_add_lib.cmake)
 * `JALOG_NO_BUILTIN_ASYNC` - Remove support for the built-in async logging features of the library. Note that async logging is still possible with this, but it has to be user-defined.
-* `JALOG_BUILD_SINKLIB` - whether to also build the [Jalog.Sinklib](sinklib.md) extension which provides several sinks (CMake target `jalog::sinklib`). On by default
 * `JALOG_BUILD_TESTS` - whether to also build the Jalog unit tests. Off by default
 * `JALOG_BUILD_EXAMPLES` - whether to also build the Jalog examples. Off by default
