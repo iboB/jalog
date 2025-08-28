@@ -30,7 +30,6 @@ include(icm_add_lib)
 # options
 option(JALOG_STATIC "jalog: build as static lib" OFF)
 option(JALOG_NO_BUILTIN_ASYNC "jalog: disable builtin async logging helpers" OFF)
-option(JALOG_BUILD_SINKLIB "jalog: build extension sinklib" ON)
 option(JALOG_BUILD_TESTS "jalog: build tests" ${ICM_DEV_MODE})
 option(JALOG_BUILD_EXAMPLES "jalog: build examples" ${ICM_DEV_MODE})
 option(JALOG_BUILD_BENCH "jalog: build benchmarks" ${ICM_DEV_MODE})
@@ -57,10 +56,6 @@ endif()
 # subdirs
 
 add_subdirectory(code)
-
-if(JALOG_BUILD_SINKLIB)
-    add_subdirectory(ext/sinklib)
-endif()
 
 if(JALOG_BUILD_TESTS)
     enable_testing()

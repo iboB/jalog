@@ -3,8 +3,8 @@
 //
 #include "WindowsColorSink.hpp"
 
-#include <jalog/Entry.hpp>
-#include <jalog/sinks/SimpleStdioSink.hpp>
+#include "SimpleStdioSink.hpp"
+#include "../Entry.hpp"
 
 #include <itlib/time_t.hpp>
 

@@ -3,7 +3,7 @@
 //
 #include "AnsiColorSink.hpp"
 
-#include <jalog/Entry.hpp>
+#include "../Entry.hpp"
 
 #include <itlib/time_t.hpp>
 

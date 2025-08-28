@@ -4,7 +4,7 @@
 macro(jalog_example example)
     set(ename jalog-example-${example})
     add_executable(${ename} ${ARGN})
-    target_link_libraries(${ename} jalog jalog-sinklib ${CMAKE_THREAD_LIBS_INIT})
+    target_link_libraries(${ename} jalog::jalog ${CMAKE_THREAD_LIBS_INIT})
 endmacro()
 
 jalog_example(HelloWorld e-HelloWorld.cpp)

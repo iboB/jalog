@@ -3,7 +3,7 @@
 //
 #include "NSLogSink.hpp"
 
-#include <jalog/Entry.hpp>
+#include "../Entry.hpp"
 
 #include <Foundation/Foundation.h>
 

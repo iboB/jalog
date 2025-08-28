@@ -3,7 +3,7 @@
 //
 #include "AndroidSink.hpp"
 
-#include <jalog/Entry.hpp>
+#include "../Entry.hpp"
 
 #include <android/log.h>
 

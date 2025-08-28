@@ -2,13 +2,13 @@
 // SPDX-License-Identifier: MIT
 //
 #pragma once
-#include "API.h"
-#include <jalog/Sink.hpp>
+#include "../API.h"
+#include "../Sink.hpp"
 
 namespace jalog::sinks
 {
 
-class JALOG_SINKLIB_API AnsiColorSink final : public Sink
+class JALOG_API AnsiColorSink final : public Sink
 {
 public:
     virtual void record(const Entry& entry) override;
