@@ -6,7 +6,7 @@ Jalog offers built-in support for asynchronous logging.
 
 ## Through `jalog::Instance`
 
-The easiest way to enable asynchronous logging in jalog is to set it up in the [instance](basics.md#set-up-an-instance) with `async()`. Instead of calling `add()` when setting up, first call `async()` and then `add()`. Any sinks added before the `async()` call will be synchronous (called immediately when logging - in the same call stack) and the ones after it will be asynchronous. Like so:
+The easiest way to enable asynchronous logging in jalog is to set it up in the [instance](basics.md#controlling-sinks) with `async()`. Instead of calling `add()` when setting up, first call `async()` and then `add()`. Any sinks added before the `async()` call will be synchronous (called immediately when logging - in the same call stack) and the ones after it will be asynchronous. Like so:
 
 ```c++
 jalog::Instance jl;

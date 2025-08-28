@@ -38,9 +38,12 @@ target_sources(jalog
 
         jalog/Instance.hpp
 
-        # sinks        
+        jalog/DefaultLogger.hpp
+        jalog/DefaultScope.hpp
+
+        # sinks
         jalog/sinks/SimpleOStreamSink.hpp
-        jalog/sinks/SimpleStdioSink.hpp        
+        jalog/sinks/SimpleStdioSink.hpp
         jalog/sinks/AnsiColorSink.hpp
         jalog/sinks/DefaultSink.hpp
 
@@ -55,6 +58,8 @@ target_sources(jalog
         jalog/_qwrite.cpp
         jalog/Printf.cpp
         jalog/Instance.cpp
+
+        jalog/DefaultLogger.cpp
 
         jalog/sinks/AnsiColorSink.cpp
 )

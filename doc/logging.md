@@ -6,7 +6,7 @@ It is a good idea for users to create their own macros, suitable for their proje
 
 ## Jalog Style Logging
 
-This is the "flagship" way of doing logging with Jalog: the macros `JALOG` and `JALOG_SCOPE` which were mentioned and used in the previous doc pages. `JALOG` is implementd with `JALOG_SCOPE` by providing the default scope as a first argument (see more on [scopes](creating-scopes.md) here).
+This is the "flagship" way of doing logging with Jalog: the macros `JALOG` and `JALOG_SCOPE` which were mentioned and used in the previous doc pages. `JALOG` is implemented with `JALOG_SCOPE` by providing the default scope as a first argument (see more on [scopes](creating-scopes.md) here).
 
 ```
 JALOG_SCOPE(scope, unscoped_level, ...)

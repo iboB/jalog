@@ -28,9 +28,9 @@ The constructor of `jalog::Scope` takes four arguments:
 
 ### Scopes of Scopes
 
-In the trivial example from above the scope's... er... well... scope was the same as the logging function. Oviously if you define a scope in a function and want to use it another, you should pass it as an argument of the second one. This is not very conventient, so to make them easier to use, scopes are best defined globally (or, perhaps as members in some singleton or singleton-like class).
+In the trivial example from above the scope's... er... well... scope was the same as the logging function. Obviously if you define a scope in a function and want to use it another, you should pass it as an argument of the second one. This is not very convenient, so to make them easier to use, scopes are best defined globally (or, perhaps as members in some singleton or singleton-like class).
 
-Note that if you define a scope globally to be used in multiple compilation units (.cpp files), you should take care to separte the definition and the declaration, much like the case is with `jalog::Default_Scope`. Here is an example
+Note that if you define a scope globally to be used in multiple compilation units (.cpp files), you should take care to separate the definition and the declaration, much like the case is with `jalog::Default_Scope`. Here is an example
 
 ```c++
 // myscope.hpp

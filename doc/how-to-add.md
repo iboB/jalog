@@ -10,20 +10,22 @@ The CMake script defines the target `jalog::jalog` which you can add as a link l
 
 ### As a CPM.cmake package
 
-The easiest way to add Jalog to a project would be as a [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) package. If you are using this package manager (and you should be :) ), you only need to add this line to your `CMakeLists.txt`: `CPMAddPackage(gh:iboB/jalog@0.1.0)`. *Update the version "0.1.0" to the one you want.*
+The easiest way to add Jalog to a project would be as a [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) package. If you are using this package manager (and you should be :) ), you only need to add this line to your `CMakeLists.txt`: `CPMAddPackage(gh:iboB/jalog@0.7.0)`. *Update the version "0.7.0" to the one you want.*
 
-Currently this is the only supported way of adding Jalog to a project though you can also add it:
+Currently this is the only supported way of adding Jalog to a project. 
+
+However you can also add it in other ways which, though explicitly supported, should work.
 
 ### As a submodule/subrepo
 
-Jalog uses [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) to handle its own depenendcies. If you add Jalog as a submodule to your repo and `add_subdirectory` things will likely still work. Jalog's CMake configuration will run CPM.cmake and fetch the dependencies. However if your project uses any of these dependencies without CPM.cmake there will be a clash of targets and the project likely won't build (or worse yet, it will build but will contain strange bugs due to ODR violations and ABI differences)
+Jalog uses [CPM.cmake](https://github.com/cpm-cmake/CPM.cmake) to handle its own dependencies. If you add Jalog as a submodule to your repo and `add_subdirectory` things will likely still work. Jalog's CMake configuration will run CPM.cmake and fetch the dependencies. However if your project uses any of these dependencies without CPM.cmake there will be a clash of targets and the project likely won't build (or worse yet, it will build but will contain strange bugs due to ODR violations and ABI differences)
 
 The dependencies of the project are
 
 * [iboB/icm@1.5.4](https://github.com/iboB/icm)
 * [iboB/splat@1.3.3](https://github.com/iboB/splat)
 * [iboB/itlib@1.11.5](https://github.com/iboB/itlib)
-* [iboB/mscharconv@1.2.3](https://github.com/iboB/mscharconv)
+* (if your system has no charconv support) [iboB/mscharconv@1.2.3](https://github.com/iboB/mscharconv)
 * (for building the tests only) [iboB/doctest-util@0.1.3](https://github.com/iboB/doctest-util)
 
 ### Other ways

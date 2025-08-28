@@ -2,9 +2,7 @@
 // SPDX-License-Identifier: MIT
 //
 #include "Logger.hpp"
-#include "DefaultLogger.hpp"
 #include "Scope.hpp"
-#include "DefaultScope.hpp"
 #include "Sink.hpp"
 
 #include <itlib/qalgorithm.hpp>
@@ -13,14 +11,6 @@
 
 namespace jalog
 {
-
-Logger& DefaultLogger()
-{
-    static Logger l;
-    return l;
-}
-
-Scope Default_Scope(std::string_view{});
 
 Logger::Logger() = default;
 Logger::~Logger() = default;
@@ -40,7 +30,7 @@ Level Logger::initialLevelOverride() const
 void Logger::flush()
 {
     std::lock_guard l(m_mutex);
-    if (!m_initialized) return; // nothing to flush
+    if (m_initState == InitState::None) return; // nothing to flush
     for (auto& s : m_sinks)
     {
         s->flush();
@@ -50,18 +40,39 @@ void Logger::flush()
 void Logger::addSink(SinkPtr sink)
 {
     std::lock_guard l(m_mutex);
-    assert(!m_initialized);
-    if (m_initialized) return; // defensive: Don't crash
+    assert(m_initState == InitState::None);
+    if (m_initState != InitState::None) return; // defensive: Don't crash
     m_sinks.push_back(std::move(sink));
 }
 
-void Logger::initialize()
-{
+void Logger::prepareUserInit() {
     std::lock_guard l(m_mutex);
-    assert(!m_initialized);
-    if (m_initialized) return; // defensive: Don't crash
+    assert(m_initState != InitState::User); // double user init?
+    if (m_initState == InitState::User) return; // defensive: Don't crash
+    if (m_initState == InitState::None) return; // nothing to do
 
-    m_initialized = true;
+    m_initState = InitState::None;
+
+    // reset scopes to uninitialized state
+    for (auto scope : m_scopes) {
+        if (!scope) continue;
+        scope->setLevel(Level::Off);
+        scope->m_sinks = {};
+    }
+
+    m_scopeSinks.clear();
+    m_sinks.clear();
+}
+
+void Logger::initialize(InitState initState)
+{
+    assert(initState != InitState::None);
+
+    std::lock_guard l(m_mutex);
+    assert(m_initState == InitState::None);
+    if (m_initState != InitState::None) return; // defensive: Don't crash
+
+    m_initState = initState;
 
     m_scopeSinks.reserve(m_sinks.size());
     for (auto& sink : m_sinks) {
@@ -93,7 +104,7 @@ void Logger::registerScope(Scope& scope)
 {
     std::lock_guard l(m_mutex);
 
-    if (m_initialized)
+    if (m_initState != InitState::None)
     {
         // if the we're initialized, also initialize scope
         initScope(scope);
@@ -122,11 +133,12 @@ void Logger::unregisterScope(Scope& scope)
     *slot = nullptr;
 }
 
-Logger::SetupDSL::SetupDSL(Logger& l) : m_logger(l) {};
+Logger::SetupDSL::SetupDSL(Logger& l) : m_logger(l) {
+    m_logger.prepareUserInit();
+}
 
-Logger::SetupDSL::~SetupDSL()
-{
-    m_logger.initialize();
+Logger::SetupDSL::~SetupDSL() {
+    m_logger.initialize(InitState::User);
 }
 
 Logger::SetupDSL& Logger::SetupDSL::overrideInitialLevel(Level lvl)

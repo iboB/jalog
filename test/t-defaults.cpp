@@ -9,6 +9,7 @@
 #include <jalog/LogPrintf.hpp>
 #include <jalog/PrintfWrap.hpp>
 #include <jalog/DefaultLogger.hpp>
+#include <jalog/DefaultScope.hpp>
 #include <jalog/Instance.hpp>
 
 TEST_SUITE_BEGIN("jalog");
@@ -17,6 +18,17 @@ jalog::Scope gscope("g", jalog::Level::Debug, 10, 20);
 
 template <jalog::Level lvl>
 auto log_gscope = jalog::PrintfWrap<gscope, lvl>;
+
+TEST_CASE("default scope") {
+    auto& s = jalog::Default_Scope;
+    CHECK(&s.logger() == &jalog::DefaultLogger());
+    CHECK(s.level() == jalog::Level::Lowest);
+    auto& sd = s.desc();
+    CHECK(sd.id() == 0);
+    CHECK(sd.label().empty());
+    CHECK(*sd.labelCStr() == 0);
+    CHECK(sd.userData == -1);
+}
 
 TEST_CASE("default logger/scope")
 {

@@ -13,11 +13,13 @@
 namespace jalog
 {
 Instance::Instance() : Instance(DefaultLogger()) {}
-Instance::Instance(Logger& l) : m_logger(l) {}
+Instance::Instance(Logger& l) : m_logger(l) {
+    m_logger.prepareUserInit();
+}
 Instance::~Instance() = default;
 
 Instance::SetupDSL::~SetupDSL() {
-    m_instance.m_logger.initialize();
+    m_instance.m_logger.initialize(Logger::InitState::User);
 }
 
 Instance::SetupDSL& Instance::SetupDSL::overrideInitialLevel(Level lvl) {

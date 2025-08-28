@@ -4,7 +4,7 @@ Jalog is a logging library written with performance in mind. It doesn't provide 
 
 Jalog supports synchronous and asynchronous logging and is generally thread safe (though it is possible to create sinks which are not thread safe).
 
-Jalog promotes (though does not require) the use of macros for logging as they allow better flexibility in terms of what is compiled and what not. Another benefit of using macros in this case is that we can afford to wrap the underlying call in an if-check at the call site.
+Jalog promotes (but does not enforce) the use of macros for logging as they allow better flexibility in terms of what is compiled and what not. Another benefit of using macros in this case is that we can afford to wrap the underlying call in an if-check at the call site.
 
 ## Levels
 

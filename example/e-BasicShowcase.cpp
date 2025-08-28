@@ -1,30 +1,22 @@
 // Copyright (c) Borislav Stanimirov
 // SPDX-License-Identifier: MIT
 //
-#include <jalog/Instance.hpp>
-#include <jalog/sinks/DefaultSink.hpp>
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
 
 #include <string>
 #include <string_view>
 
-struct Person
-{
+struct Person {
     std::string name;
     int age;
 };
 
-std::ostream& operator<<(std::ostream& o, const Person& p)
-{
+std::ostream& operator<<(std::ostream& o, const Person& p) {
     return o << p.name << '(' << p.age << ')';
 }
 
-int main()
-{
-    jalog::Instance jl;
-    jl.setup().add<jalog::sinks::DefaultSink>();
-
+int main() {
     JALOG(Debug, "Log integers: ", 34, ", or in a custom base: ", jalog::base<16>(255));
     JALOG(Info, "Log floating point numbers with no precision loss: ", 12.4356631);
 

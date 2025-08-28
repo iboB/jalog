@@ -29,9 +29,6 @@ A small snippet showcasing some of the library's features:
 *It also exists as a complete and buildable example [here](example/e-BasicShowcase.cpp).*
 
 ```c++
-jalog::Instance jl;
-jl.setup().add<jalog::sinks::ColorSink>();
-
 JALOG(Debug, "Log integers: ", 34, ", or in a custom base: ", jalog::base<16>(255));
 JALOG(Info, "Log floating point numbers with no precision loss: ", 12.4356631);
 

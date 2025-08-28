@@ -66,16 +66,25 @@ public:
     // abnormal termination is imminent and there is risk of losing log messages
     void flush();
 
+protected:
+    enum class InitState {
+        None,
+        System,
+        User,
+    };
+
+    void addSink(SinkPtr sink);
+    void initialize(InitState initState);
+    void prepareUserInit();
+
 private:
     mutable std::mutex m_mutex;
 
-    // setup
+    // Sinks and initialization
     friend class Instance;
-    void addSink(SinkPtr sink);
-    void initialize();
     std::vector<SinkPtr> m_sinks;
     std::vector<Sink*> m_scopeSinks; // for scope initialization
-    bool m_initialized = false;
+    InitState m_initState = InitState::None;
 
     // scope registry
     Level m_initialLevelOverride = Level::Lowest;

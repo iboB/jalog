@@ -6,7 +6,6 @@
 #include <jalog/Log.hpp>
 #include <jalog/LogPrintf.hpp>
 #include <jalog/LogStream.hpp>
-#include <jalog/DefaultLogger.hpp>
 
 #include <jalog/Logger.hpp>
 #include <jalog/DefaultScope.hpp>
@@ -15,9 +14,10 @@ TEST_SUITE_BEGIN("jalog");
 
 TEST_CASE("scopes")
 {
-    jalog::Scope s1("s1", jalog::Level::Debug, 1, 2);
+    jalog::Logger l;
+    jalog::Scope s1(l, "s1", jalog::Level::Debug, 1, 2);
 
-    CHECK(&s1.logger() == &jalog::DefaultLogger());
+    CHECK(&s1.logger() == &l);
 
     auto& s1d = s1.desc();
     CHECK(s1d.id() == 1);
@@ -37,17 +37,6 @@ TEST_CASE("scopes")
 
     jalog::Scope longname("0123456789ABCDEFGHIJKLMNOP");
     CHECK(longname.desc().label() == "0123456789ABCDEFGHI");
-}
-
-TEST_CASE("default scope")
-{
-    auto& s = jalog::Default_Scope;
-    CHECK(&s.logger() == &jalog::DefaultLogger());
-    auto& sd = s.desc();
-    CHECK(sd.id() == 0);
-    CHECK(sd.label().empty());
-    CHECK(*sd.labelCStr() == 0);
-    CHECK(sd.userData == -1);
 }
 
 struct TestHelper
