@@ -25,7 +25,7 @@
 
 namespace jalog::this_thread {
 
-int set_name(std::string_view name) {
+int set_name(std::string_view name) noexcept {
     // max length for thread names with pthread is 16 symbols
     // even though we don't have the same limitation on Windows, we assert anyway for multiplatform-ness
     // note that the length is safe-guarded below
@@ -34,6 +34,11 @@ int set_name(std::string_view name) {
     assert(name.length() < 16);
 
 #if WIN32_THREADS
+#   if defined(__MINGW32__)
+    // mingw doesn't have SetThreadDescription
+    (void)name;
+    return 1;
+#   else
     auto h = GetCurrentThread();
     std::wstring ww;
     ww.reserve(name.length());
@@ -44,6 +49,7 @@ int set_name(std::string_view name) {
     // hresult hax
     if (SUCCEEDED(res)) return 0;
     return res;
+#   endif
 #else
     char name16[16];
     auto len = std::min(name.length() + 1, size_t(16));
