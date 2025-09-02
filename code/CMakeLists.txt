@@ -91,9 +91,11 @@ if(JALOG_NO_BUILTIN_ASYNC)
 else()
     target_sources(jalog
         INTERFACE FILE_SET HEADERS FILES
+            jalog/bits/thread_name.hpp
             jalog/AsyncLogging.hpp
             jalog/AsyncLoggingThread.hpp
         PRIVATE
+            jalog/bits/thread_name.cpp
             jalog/AsyncLogging.cpp
     )
 endif()

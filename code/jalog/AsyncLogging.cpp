@@ -6,6 +6,8 @@
 
 #include "Entry.hpp"
 
+#include "bits/thread_name.hpp"
+
 #include <itlib/pod_vector.hpp>
 #include <itlib/qalgorithm.hpp>
 
@@ -232,7 +234,7 @@ public:
         m_running.test_and_set();
 
         m_thread = std::thread([this, &al, name = std::string(threadName)] {
-            // TODO: set thread name
+            this_thread::set_name(name);
 
             while (m_running.test_and_set(std::memory_order_acquire)) {
                 al.update();
