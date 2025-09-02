@@ -15,8 +15,8 @@
 #   include <string>
 using tid = HANDLE;
 #else
-#   include <cstring>
 #   include <cstdio>
+#   include <pthread.h>
 #   if defined(__ANDROID__)
 #       include <sys/prctl.h>
 #   endif
