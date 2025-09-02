@@ -13,29 +13,17 @@
 #   define WIN32_LEAN_AND_MEAN
 #   include <Windows.h>
 #   include <string>
-using tid = HANDLE;
 #else
 #   include <cstdio>
 #   include <pthread.h>
 #   if defined(__ANDROID__)
 #       include <sys/prctl.h>
 #   endif
-using tid = pthread_t;
 #endif
 
 #include <cassert>
 
 namespace jalog::this_thread {
-
-namespace {
-tid get_native_handle() {
-#if WIN32_THREADS
-    return GetCurrentThread();
-#else
-    return pthread_self();
-#endif
-}
-}
 
 int set_name(std::string_view name) {
     // max length for thread names with pthread is 16 symbols
@@ -45,9 +33,8 @@ int set_name(std::string_view name) {
     // however it's here so we have a notification if we violate the rule
     assert(name.length() < 16);
 
-    tid h = get_native_handle();
-
 #if WIN32_THREADS
+    auto h = GetCurrentThread();
     std::wstring ww;
     ww.reserve(name.length());
     for (auto c : name) {
@@ -61,7 +48,12 @@ int set_name(std::string_view name) {
     char name16[16];
     auto len = std::min(name.length() + 1, size_t(16));
     snprintf(name16, len, "%s", name.data());
+#   if defined(__APPLE__)
+    return pthread_setname_np(name16);
+#   else
+    auto h = pthread_self();
     return pthread_setname_np(h, name16);
+#   endif
 #endif
 }
 } // namespace jalog
